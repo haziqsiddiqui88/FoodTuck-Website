@@ -1,5 +1,5 @@
 import React from 'react'
-import { Search, Plus, ShoppingBag, User } from 'lucide-react'
+import { Search, ShoppingBag, User } from 'lucide-react'
 
 
 import Link from 'next/link'
