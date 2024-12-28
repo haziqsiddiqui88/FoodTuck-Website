@@ -19,15 +19,17 @@ export default function Footer() {
               easy.
             </p>
           </div>
-          <div className="flex items-center w-[450px] h-[50px] bg-[#FF9F0D] rounded-md overflow-hidden">
+          <div className="flex  items-center mx-auto lg:w-[450px] lg:ml-[270px]  h-[50px]  bg-[#FF9F0D] rounded-md overflow-hidden">
             <input
               type="email"
               placeholder="Enter Your Email"
               className="flex-grow px-4 py-2 text-white bg-transparent placeholder-white focus:outline-none"
             />
+            <Link href='/account'>
             <button className="px-6 py-2 bg-white h-[50px] hover:text-orange-500 text-[#FF9F0D] font-medium">
               Subscribe Now
             </button>
+            </Link>
           </div>
         </div>
 
