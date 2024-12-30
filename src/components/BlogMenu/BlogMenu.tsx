@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 const BlogMenu = () => {
   return (
-    <div className="flex flex-col h-[550px] w-[400px] border-[1px] ">
+    <div className="flex flex-col h-[550px] md:w-[400px] sm:w-[300px] md:border-[1px] ">
          <h3 className="text-xl ml-4 mt-4  font-semibold mb-4">Filter By Menu</h3>
                     <div className="space-y-7 ml-4">
                       {[ 
@@ -15,7 +15,7 @@ const BlogMenu = () => {
                         },
                         {
                           id: 2,
-                          Image: "/grid1.png",
+                          Image: "/menupost6.png",
                           title: "Fast Food ",
                           number: '46'
                         },

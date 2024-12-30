@@ -88,171 +88,98 @@ export default function Shop() {
 
  {/*Content Start */}
 
- <div className="min-h-screen ">
-      <div className="container mx-auto p-6">
+ <div className="min-h-screen mt-5 mb-5">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Sort and Filter Section */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex gap-2">
+        <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+          <div className="flex flex-wrap gap-2 items-center">
             <p className="p-2">Sort By:</p>
-            <select className="border text-gray-600 p-2 w-[180px] h-[40px] rounded-md">
+            <select className="border text-gray-600 p-2 w-[180px] rounded-md">
               <option>Newest</option>
               <option>Oldest</option>
             </select>
             <p className="p-2">Show:</p>
-            <select className="border text-gray-600 p-2 w-[180px] h-[40px] rounded-md">
+            <select className="border text-gray-600 p-2 w-[180px] rounded-md">
               <option>Default</option>
               <option>Popular</option>
             </select>
-         
-          <div className="flex items-center lg:ml-[400px] sm:w-[300px] w-[350px] h-[50px]  rounded-md overflow-hidden">
+          </div>
+          <div className="flex items-center w-full md:w-[350px] h-[50px] rounded-md overflow-hidden">
             <input
               type="text"
               placeholder="Search Your Product"
-              className="flex-grow px-4 py-2 border-[1px] bg-transparent  focus:outline-none"
+              className="flex-grow px-4 py-2 border-[1px] bg-transparent focus:outline-none"
             />
-            <Link href="/error" >
+             <Link href="/error" >
             <button className="px-4 py-2 bg-[#FF9F0D] h-[43px] hover:text-orange-500 text-white font-medium">
               <Search />
-            </button>
-            </Link>
-          </div>
+            </button></Link>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Products Grid */}
-          <div className="col-span-3 grid grid-cols-3 gap-6">
-            {[
-              {
-                title: "Fresh Lime",
-                price: "$4.00",
-                oldPrice: "$6.00",
-                image: "/shop1.png",
-              },
-              {
-                title: "Chocolate Muffin",
-                price: "$3.00",
-                image: "/shop2.png",
-              },
-              {
-                title: "Burger",
-                price: "$7.00",
-                oldPrice: "$9.00",
-                image: "/shop3.png",
-              },
-              { title: "Country Burger", price: "$10.00", image: "/shop4.png" },
-              { title: "Drink", price: "$2.50", image: "/shop5.png" },
-              { title: "Pizza", price: "$12.00", image: "/shop6.png" },
-              { title: "Cheese Butter", price: "$6.00", image: "/shop7.png" },
-              { title: "Sandwiches", price: "$5.00", image: "/shop8.png" },
-              { title: "Chicken Chop", price: "$8.00", image: "/shop9.png" },
-              {
-                title: "Fresh Lime",
-                price: "$4.00",
-                oldPrice: "$6.00",
-                image: "/shop1.png",
-              },
-              {
-                title: "Chocolate Muffin",
-                price: "$3.00",
-                image: "/shop2.png",
-              },
-              {
-                title: "Burger",
-                price: "$7.00",
-                oldPrice: "$9.00",
-                image: "/shop3.png",
-              },
-              {
-                title: "Fresh Lime",
-                price: "$4.00",
-                oldPrice: "$6.00",
-                image: "/shop4.png",
-              },
-              {
-                title: "Chocolate Muffin",
-                price: "$3.00",
-                image: "/shop5.png",
-              },
-              {
-                title: "Burger",
-                price: "$7.00",
-                oldPrice: "$9.00",
-                image: "/shop6.png",
-              },
-            ].map((product, index) => (
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {[...Array(12)].map((_, index) => (
               <div
                 key={index}
-                className=" p-4  shadow hover:shadow-lg transition"
+                className="p-4 shadow hover:shadow-lg transition rounded-md bg-white"
               >
                 <Image
-                  src={product.image}
-                  alt={product.title}
+                  src={`/shop${(index % 9) + 1}.png`}
+                  alt={`Product ${index + 1}`}
                   width={300}
                   height={200}
-                  className=" mb-4 shadow hover:shadow-lg transition"
+                  className="mb-4 rounded-md"
                 />
-                <h3 className="font-semibold text-lg mb-2">{product.title}</h3>
+                <h3 className="font-semibold text-lg mb-2">Product {index + 1}</h3>
                 <div className="flex items-center justify-between">
-                  <p className="text-[#ff9f0d] font-bold">{product.price}</p>
-                  {product.oldPrice && (
-                    <p className="text-gray-400 line-through">
-                      {product.oldPrice}
-                    </p>
-                  )}
+                  <p className="text-[#ff9f0d] font-bold">$10.00</p>
+                  <p className="text-gray-400 line-through">$15.00</p>
                 </div>
               </div>
             ))}
           </div>
+
           {/* Sidebar Filters */}
           <aside className="col-span-1 bg-white p-4 rounded-lg shadow">
             <h3 className="font-semibold mb-4">Category</h3>
             <div>
-              {[
-                "Sandwiches",
-                "Burger",
-                "Chicken Chop",
-                "Drinks",
-                "Pizza",
-                "Non Veg",
-                "Thi",
-                "Uncategorized",
-              ].map((category) => (
-                <label className="flex items-center mb-2" key={category}>
-                  <input type="checkbox" className="mr-2" />
-                  {category}
-                </label>
-              ))}
+              {["Sandwiches", "Burger", "Chicken Chop", "Drinks", "Pizza", "Non Veg", "Thi", "Uncategorized"].map(
+                (category) => (
+                  <label className="flex items-center mb-2" key={category}>
+                    <input type="checkbox" className="mr-2" />
+                    {category}
+                  </label>
+                )
+              )}
             </div>
             <div
-              className="mt-7  text-white w-[245px] h-[280px]"
-              style={{ backgroundImage: `url('/black2.png')` }}
+              className="mt-7 text-white rounded-lg overflow-hidden"
+              style={{ backgroundImage: `url('/black2.png')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
             >
-              <div className="p-8 grid grid-rows-3 gap-[5px] ">
-              <h3 className=" font-semibold ">Perfect Taste</h3>
-              <h1 className="font-semibold text-xl">Classic Restaurant</h1>
-              <h1 className="font-semibold text-[#ff9f0d]">45.00$</h1>
+              <div className="p-6 grid gap-4">
+                <h3 className="font-semibold">Perfect Taste</h3>
+                <h1 className="font-semibold text-xl">Classic Restaurant</h1>
+                <h1 className="font-semibold text-[#ff9f0d]">$45.00</h1>
               </div>
               <Link
-                href="/"
-                className="flex hover:text-gray-300   text-white ml-7 mt-16  "
+                href="/error"
+                className="flex items-center hover:text-gray-300 text-white px-4 py-2"
               >
-                <p>Shop Now</p><IoArrowForwardOutline  className="text-2xl ml-2" />
-                 
+                <p>Shop Now</p>
+                <IoArrowForwardOutline className="text-2xl ml-2" />
               </Link>
             </div>
-            <div className="mt-5 -ml-2">
+            <div className="mt-5">
               <PriceFilter />
             </div>
-            <div className='-ml-2'>
+            <div className="mt-4">
               <LatestProduct />
             </div>
-            <div className='-ml-2 mt-5'>
-             <ShopTag />
+            <div className="mt-5">
+              <ShopTag />
             </div>
-
-
-            
           </aside>
         </div>
       </div>

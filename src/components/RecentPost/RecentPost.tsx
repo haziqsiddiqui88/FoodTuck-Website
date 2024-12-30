@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const RecentPost = () => {
   return (
-    <div className="flex flex-col h-[520px] w-[400px] border-[1px]  ">
+    <div className="flex flex-col h-[520px] md:w-[400px] sm:w-[300px] md:border-[1px]  ">
         <h3 className="text-xl ml-4 mt-4 font-semibold mb-4">Recent Post</h3>
             <div className="space-y-6 ml-4">
               {[ 

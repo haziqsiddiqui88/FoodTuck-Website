@@ -37,7 +37,7 @@ const BlogGallery = () => {
   ]
   
   return (
-    <div className="flex flex-col h-[300px] w-[400px] border-[1px] ">
+    <div className="flex flex-col h-[300px] md:w-[400px] sm:w-[300px]  md:border-[1px] ">
      <h3 className="text-xl ml-4 mt-4 font-semibold mb-4">Blog Gallery</h3>
      <div className="grid grid-cols-3 ml-2 ">
      

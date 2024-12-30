@@ -189,9 +189,9 @@ export default function Home() {
 
             {/* Right Content - Hero Image */}
 
-            <div className="relative">
+            <div className="relative mx-auto">
               {/* Main Image */}
-              <div className="relative -mt-8 w-[500px] aspect-square mx-auto">
+              <div className="relative -mt-8 w-[500px] aspect-square">
                 <Image
                   src="/home-second1.png"
                   alt="Delicious dish with rice and eggs"
@@ -202,7 +202,7 @@ export default function Home() {
               </div>
 
               {/* Grid Layout for Two Images Below */}
-              <div className="grid grid-cols-2 gap-4 -mt-40 w-[500px] mx-auto ">
+              <div className="grid grid-cols-2 gap-4 -mt-40 w-[500px]  ">
                 <div className="relative aspect-square">
                   <Image
                     src="/home-second2.png"

@@ -2,7 +2,7 @@ import React from "react";
 
 const BlogTag = () => {
   return (
-    <div className="flex flex-col h-[300px] w-[400px] border-[1px] ">
+    <div className="flex flex-col h-[300px] md:w-[400px] sm:w-[300px] md:border-[1px] ">
       <h3 className="text-xl ml-4 mt-4 font-semibold mb-4">Popular Tags</h3>
       <div className="flex flex-col gap-[20px]">
         <div className="flex flex-row gap-[10px] text-gray-600 items-center justify-center">

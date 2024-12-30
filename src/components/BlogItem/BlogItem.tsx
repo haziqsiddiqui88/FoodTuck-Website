@@ -5,7 +5,7 @@ import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { GrFacebookOption } from "react-icons/gr";
 const BlogItem = () => {
   return (
-    <div className="flex flex-col h-[450px] w-[400px] border-[1px] items-center ">
+    <div className="flex flex-col h-[450px] md:w-[400px] sm:w-[300px] md:border-[1px] items-center ">
       <div className="mt-10">
         <Image
           className="rounded-full"
