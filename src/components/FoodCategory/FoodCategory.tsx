@@ -6,9 +6,9 @@ const FoodCategory = () => {
        // Items array containing food details
   const items = [
     { id: 1, Image: "/food1.png", label: "Save 30% on Fast Food" },
-    { id: 2, Image: "/food2.png", label: "Delicious Burgers" },
+    { id: 2, Image: "/food4.png", label: "Delicious Burgers" },
     { id: 3, Image: "/food3.png", label: "Healthy Salads" },
-    { id: 4, Image: "/food4.png", label: "Desserts" },
+    { id: 4, Image: "/food2.png", label: "Desserts" },
   ];
 
   return (

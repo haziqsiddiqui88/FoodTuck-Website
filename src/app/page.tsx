@@ -51,13 +51,7 @@ const testimonials = [
     rating: 4,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam pellentesque bibendum non dui volutpat fringilla bibendum. Urna, elit augue urna, vitae feugiat pretium donec id elementum. Ultrices mattis sed vitae mus risus. Lacus nisi, et ac dapibus sit eu velit in consequat.",
   },
-
 ];
-
-
-
-
-
 
 const chefs = [
   {
@@ -156,79 +150,81 @@ export default function Home() {
         </div>
       </div>
 
-      {/* second layout */}
+      {/* Second layout */}
 
-      <div className="pt-20 bg-black text-white relative overflow-hidden">
-        <div className="container mx-auto px-2 h-full">
-          <div className="grid md:grid-cols-2 gap-8 items-center h-full py-12">
-            {/* Left Content */}
-            <div className="space-y-6 mx-auto">
-              <p className="font-playwrite  text-[#ff9f0d] text-3xl">
-                About us
-              </p>
-              <h1 className="text-3xl md:text-6xl font-bold  leading-tight">
-                <span className="text-[#ff9f0d]">We </span>Create the best
-                <br />
-                foody <span>product</span>
-              </h1>
-              <p className="text-gray-400 max-w-md">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius
-                sed pharetra dictum neque massa congue
-              </p>
-              <h1>✔️ Lorem ipsum dolor sit amet, consectetur </h1>
-              <h1>✔️ Lorem ipsum dolor sit amet, consectetur </h1>
-              <h1>✔️ Lorem ipsum dolor sit amet, consectetur </h1>
+      <div className=" bg-black text-white pt-20 relative overflow-hidden">
+  <div className="container mx-auto px-4 h-full">
+    <div className="grid md:grid-cols-2 gap-8 items-center h-full py-12">
+      {/* Left Content */}
+      <div className="space-y-6 mx-auto">
+        <p className="font-playwrite text-[#ff9f0d] text-3xl">About us</p>
+        <h1 className="text-3xl md:text-6xl font-bold leading-tight">
+          <span className="text-[#ff9f0d]">We </span>Create the best
+          <br />
+          foody <span>product</span>
+        </h1>
+        <p className="text-gray-400 max-w-md">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius sed pharetra dictum neque massa congue
+        </p>
+        <ul className="space-y-2">
+          <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
+          <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
+          <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
+        </ul>
+        <Link
+          href="/menu"
+          className="inline-block bg-[#ff9f0d] text-white px-8 py-3 rounded-full hover:bg-orange-600 transition-colors"
+        >
+          Read More
+        </Link>
+      </div>
 
-              <Link
-                href="/menu"
-                className="inline-block bg-[#ff9f0d] text-white px-8 py-3 rounded-full hover:bg-orange-600 transition-colors"
-              >
-                Read More
-              </Link>
-            </div>
-
-            {/* Right Content - Hero Image */}
-
-            <div className="relative mx-auto">
-              {/* Main Image */}
-              <div className="relative -mt-8 w-[500px] aspect-square">
-                <Image
-                  src="/home-second1.png"
-                  alt="Delicious dish with rice and eggs"
-                  fill
-                  className="object-contain hover:scale-105 transition-transform duration-300"
-                  priority
-                />
-              </div>
-
-              {/* Grid Layout for Two Images Below */}
-              <div className="grid grid-cols-2 gap-4 -mt-40 w-[500px]  ">
-                <div className="relative aspect-square">
-                  <Image
-                    src="/home-second2.png"
-                    alt="Delicious bread with tomato and cheese"
-                    fill
-                    className="object-contain hover:scale-105 transition-transform duration-300"
-                    priority
-                  />
-                </div>
-                <div className="relative aspect-square">
-                  <Image
-                    src="/home-second3.png"
-                    alt="Delicious bread with tomato and cheese"
-                    fill
-                    className="object-contain hover:scale-105 transition-transform duration-300"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Right Content - Hero Image */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-4xl">
+        {/* Top Image */}
+        <div className="relative w-full h-64 lg:col-span-2">
+          <Image
+            src="/home-second1.png"
+            alt="Avocado Toast with Egg"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+        {/* Bottom Left Image */}
+        <div className="relative w-full h-64">
+          <Image
+            src="/home-second2.png"
+            alt="Grilled Sandwich with Salad"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+        {/* Bottom Right Image */}
+        <div className="relative w-full h-64">
+          <Image
+            src="/home-second3.png"
+            alt="Fresh Veggie Sandwich"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+          />
         </div>
       </div>
 
-      {/* 
-food-catogories */}
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+      {/*food-catogories */}
 
       <FoodCategory />
 
@@ -339,7 +335,7 @@ food-catogories */}
       <Experience />
 
       {/*  Our Menu */}
-     <MenuPost />
+      <MenuPost />
       {/*Our Chef Start*/}
 
       <section className="relative py-24 bg-transparent overflow-hidden">
@@ -420,82 +416,82 @@ food-catogories */}
 
       {/*Client*/}
       <div className="">
-       <section className=" py-24  relative overflow-hidden">
-             <div className="container  mx-auto px-4 sm:px-6 lg:px-8">
-               {/* Header */}
-               <h3 className="font-playwrite text-[#ff9f0d] text-3xl text-center mb-5">
-                 Testimonials
-               </h3>
-               <h1 className="text-white mb-2 text-4xl font-bold text-center">
-                 What Our Clients Say
-               </h1>
-       
-               {/* Testimonial Card */}
-               <div className="max-w-3xl mx-auto bg-slate-50 text-center  shadow-lg p-12  " >
-                 {/* Quote Icon */}
-                 {/* Quote Icon */}
-                 <div className="flex justify-center mb-4 ">
-                   <Image
-                     src="/Ellipse6.png"
-                     alt="quote"
-                     width={90}
-                     height={90}
-                     className="object-contain"
-                   />
-                 </div>
-                 <div className="flex justify-center mb-8">
-                   <PiQuotesLight className="text-[#FF9F0D] text-5xl" />
-                 </div>
-       
-                 {/* Testimonial Content */}
-                 <div className="mb-5">
-                   <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                     {testimonials[0].text}
-                   </p>
-       
-                  
-       
-                   {/* Rating Stars */}
-                   <div className="flex justify-center gap-1 mb-4">
-                     {[...Array(5)].map((_, index) => (
-                       <FaStar
-                         key={index}
-                         className={`text-2xl ${
-                           index < testimonials[0].rating
-                             ? "text-[#FF9F0D]"
-                             : "text-gray-300"
-                         }`}
-                       />
-                     ))}
-                   </div>
-       
-                   {/* Name and Role */}
-                   <h4 className="text-2xl font-bold mb-2">{testimonials[0].name}</h4>
-                   <p className="text-gray-500">{testimonials[0].role}</p>
-                 </div>
-                 {/* Carousel Dots */}
-                 <div className="flex justify-center gap-2">
-                   {[...Array(4)].map((_, index) => (
-                     <button
-                       key={index}
-                       className={`w-3 h-3 rounded-full ${
-                         index === 0 ? "bg-[#FF9F0D]" : "bg-[#FF9F0D]/20"
-                       }`}
-                       aria-label={`Go to slide ${index + 1}`}
-                     />
-                   ))}
-                 </div>
-               </div>
-             </div>
-           </section>
-      </div>
-{/*Restaurant Process*/}
+        <section className=" py-24  relative overflow-hidden">
+          <div className="container  mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <h3 className="font-playwrite text-[#ff9f0d] text-3xl text-center mb-5">
+              Testimonials
+            </h3>
+            <h1 className="text-white mb-2 text-4xl font-bold text-center">
+              What Our Clients Say
+            </h1>
 
-<div className="mt-16 mb-16">
-<RestaurantProcess /> </div>
-{/*Blogs Post*/}
-     <BlogPost />
+            {/* Testimonial Card */}
+            <div className="max-w-3xl mx-auto bg-slate-50 text-center  shadow-lg p-12  ">
+              {/* Quote Icon */}
+              {/* Quote Icon */}
+              <div className="flex justify-center mb-4 ">
+                <Image
+                  src="/Ellipse6.png"
+                  alt="quote"
+                  width={90}
+                  height={90}
+                  className="object-contain"
+                />
+              </div>
+              <div className="flex justify-center mb-8">
+                <PiQuotesLight className="text-[#FF9F0D] text-5xl" />
+              </div>
+
+              {/* Testimonial Content */}
+              <div className="mb-5">
+                <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                  {testimonials[0].text}
+                </p>
+
+                {/* Rating Stars */}
+                <div className="flex justify-center gap-1 mb-4">
+                  {[...Array(5)].map((_, index) => (
+                    <FaStar
+                      key={index}
+                      className={`text-2xl ${
+                        index < testimonials[0].rating
+                          ? "text-[#FF9F0D]"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {/* Name and Role */}
+                <h4 className="text-2xl font-bold mb-2">
+                  {testimonials[0].name}
+                </h4>
+                <p className="text-gray-500">{testimonials[0].role}</p>
+              </div>
+              {/* Carousel Dots */}
+              <div className="flex justify-center gap-2">
+                {[...Array(4)].map((_, index) => (
+                  <button
+                    key={index}
+                    className={`w-3 h-3 rounded-full ${
+                      index === 0 ? "bg-[#FF9F0D]" : "bg-[#FF9F0D]/20"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      {/*Restaurant Process*/}
+
+      <div className="mt-16 mb-16">
+        <RestaurantProcess />{" "}
+      </div>
+      {/*Blogs Post*/}
+      <BlogPost />
     </div>
-    
   );
 }
