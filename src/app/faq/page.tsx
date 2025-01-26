@@ -3,7 +3,7 @@ import { Search, ShoppingBag, User } from 'lucide-react'
 
 
 import Link from 'next/link'
-import FaqItem from '@/components/FaqItem/FaqItem'
+import FaqItem from '@/components/layout/FaqItem/FaqItem'
 
 export default function page() {
 

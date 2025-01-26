@@ -1,9 +1,9 @@
 import { Search, ShoppingBag, User } from 'lucide-react'
 import Image from "next/image";
 import { IoPlayOutline } from "react-icons/io5";
-import TeamMember from '@/components/TeamMember/TeamMember';
-import Testimonials from '@/components/Testimonials/Testimonials';
-import AboutItem from '@/components/AboutItem/AboutItem';
+import TeamMember from '@/components/layout/TeamMember/TeamMember';
+import Testimonials from '@/components/layout/Testimonials/Testimonials';
+import AboutItem from '@/components/layout/AboutItem/AboutItem';
 import Link from 'next/link'
 
 import React from 'react'

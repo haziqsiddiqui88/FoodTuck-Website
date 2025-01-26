@@ -12,11 +12,11 @@ import { PiQuotesLight } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { CiPizza } from "react-icons/ci";
 import { PiHamburgerLight } from "react-icons/pi";
-import Experience from "@/components/Experience/Experience";
-import FoodCategory from "@/components/FoodCategory/FoodCategory";
-import RestaurantProcess from "@/components/RestaurantProcess/RestaurantProcess";
-import BlogPost from "@/components/BlogPost/BlogPost";
-import MenuPost from "@/components/MenuPost/MenuPost";
+import Experience from "@/components/layout/Experience/Experience";
+import FoodCategory from "@/components/layout/FoodCategory/FoodCategory";
+import RestaurantProcess from "@/components/layout/RestaurantProcess/RestaurantProcess";
+import BlogPost from "@/components/layout/BlogPost/BlogPost";
+import MenuPost from "@/components/layout/MenuPost/MenuPost";
 
 const testimonials = [
   {

@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { PiCalendarCheckDuotone } from "react-icons/pi";
 import { FaRegComments } from "react-icons/fa6";
 import { RiAdminLine } from "react-icons/ri";
-import BlogItem from '@/components/BlogItem/BlogItem';
-import RecentPost from '@/components/RecentPost/RecentPost';
-import BlogMenu from '@/components/BlogMenu/BlogMenu';
-import BlogTag from '@/components/BlogTag/BlogTag';
-import BlogGallery from '@/components/BlogGallery/BlogGallery';
-import FollowUs from '@/components/FollowUS/FollowUs';
+import BlogItem from '@/components/layout/BlogItem/BlogItem';
+import RecentPost from '@/components/layout/RecentPost/RecentPost';
+import BlogMenu from '@/components/layout/BlogMenu/BlogMenu';
+import BlogTag from '@/components/layout/BlogTag/BlogTag';
+import BlogGallery from '@/components/layout/BlogGallery/BlogGallery';
+import FollowUs from '@/components/layout/AboutItem/FollowUS/FollowUs';
 
 export default function Page() {
   return (

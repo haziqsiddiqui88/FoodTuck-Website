@@ -1,11 +1,11 @@
 'use client'
 import React from "react";
-import Dessert from "@/components/Dessert/Dessert";
-import Drink from "@/components/Drinks/Drinks";
-import Experience from "@/components/Experience/Experience";
+import Dessert from "@/components/layout/Dessert/Dessert";
+import Drink from "@/components/layout/Drinks/Drinks";
+import Experience from "@/components/layout/Experience/Experience";
 import MainCourse from "@/components/MainCourse/MainCourse";
-import StarterMenu from "@/components/StarterMenu/StarterMenu";
-import PartnersAndClients from "@/components/PartnerClient/PartnerClient";
+import StarterMenu from "@/components/layout/StarterMenu/StarterMenu";
+import PartnersAndClients from "@/components/layout/PartnerClient/PartnerClient";
 import Link from 'next/link'
 
 import { Search, User, ShoppingBag,} from 'lucide-react'
