@@ -1,9 +1,14 @@
-// components/ProductDetails.tsx (Client Component)
+
 "use client";
 
 import { useState } from "react";
 
-const ProductDetails = ({ food }: { food: any }) => {
+interface Food {
+  summary: string;
+  
+}
+
+const DescReview   = ({ food }: { food: Food }) => {
   const [activeTab, setActiveTab] = useState("description");
 
   return (
@@ -36,4 +41,4 @@ const ProductDetails = ({ food }: { food: any }) => {
   );
 };
 
-export default ProductDetails;
+export default DescReview ;
