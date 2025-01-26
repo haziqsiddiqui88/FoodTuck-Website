@@ -2,6 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { Search, ShoppingBag, User } from 'lucide-react'
+import Image from 'next/image'
 
 const page = () => {
   
@@ -154,11 +155,14 @@ const page = () => {
 
         {/* Right Section - Image */}
         <div className="hidden md:block">
-          <img
-            src="/grid4.png"
-            alt="Decorative"
-            className="w-full h-[610px] object-cover"
-          />
+         
+<Image
+  src="/grid4.png"
+  alt="Decorative"
+  width={1920}  // Specify the width
+  height={610}  // Specify the height
+  className="object-cover"
+/>
         </div>
       </div>
     </div>

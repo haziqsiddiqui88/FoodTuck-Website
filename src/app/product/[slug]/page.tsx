@@ -9,26 +9,26 @@ import Image from "next/image"; // Import Image from Next.js for optimized image
 import DescReview from "@/components/layout/DescReview/DescReview";
 
 export const revalidate = 60; // seconds
-
 export async function generateStaticParams() {
   const query = `*[_type=='food']{
     "slug":slug.current
   }`;
   const slugs = await client.fetch(query);
-  const slugRoutes = slugs.map((item: { slug: string }) => item.slug);
-  console.log(slugRoutes);
-  return slugRoutes.map((slug: string) => ({ slug }));
+
+  return slugs.map((item: { slug: string }) => ({
+    params: { slug: item.slug },
+  }));
 }
 
-const Page = async ({ params: { slug } }: { params: { slug: string } }) => {
+const Page = async ({ params }: { params: { slug: string } }) => {
+  const { slug } = params;
 
- 
   const query = `*[_type=='food' && slug.current=='${slug}'] {
-    foodName, price, tags, image, description, available,category,originalPrice,summary
+    foodName, price, tags, image, description, available, category, originalPrice, summary
   }[0]`;
 
   const food = await client.fetch(query);
-  console.log(food);
+
 
   return (
     <div className="min-h-screen">
