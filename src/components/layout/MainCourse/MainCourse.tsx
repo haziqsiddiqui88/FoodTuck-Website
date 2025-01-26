@@ -1,8 +1,9 @@
 
 import { Coffee } from 'lucide-react';
-import Heading from '../layout/Heading/Heading';
+
 import { MainCoursItem } from '@/constant/MainCourse';
 import Image from 'next/image';
+import Heading from '../Heading/Heading';
 
 export default function MainCours() {
   return (
