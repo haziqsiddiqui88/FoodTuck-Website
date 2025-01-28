@@ -105,7 +105,7 @@ const CartPage = () => {
       {/* navbar end */}
       <div className="p-4 sm:p-8">
         {cart.length === 0 ? (
-          <p>Your cart is empty.</p>
+          <p className="text-2xl  font-thin">Your cart is empty.</p>
         ) : (
           <div className="space-y-4 max-w-6xl mx-auto">
             <h1 className="text-2xl sm:text-3xl font-bold mb-6">Cart</h1>

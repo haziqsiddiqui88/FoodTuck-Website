@@ -7,6 +7,7 @@ import Image from "next/image";
 import DescReview from "@/components/layout/DescReview/DescReview";
 import AddToCartButton from "@/components/layout/AddToCartButton/AddToCartButton";
 
+
 export const revalidate = 60; // seconds
 export async function generateStaticParams() {
   const query = `*[_type=='food']{
@@ -14,13 +15,14 @@ export async function generateStaticParams() {
   }`;
   const slugs = await client.fetch(query);
 
+
   return slugs.map((item: { slug: string }) => ({
     params: { slug: item.slug },
   }));
 }
-
 const Page = async ({ params }: { params: { slug: string } }) => {
-  const { slug } = params;
+  
+  const { slug } = await Promise.resolve(params); 
 
   const query = `*[_type=='food' && slug.current=='${slug}'] {
     foodName, price, tags, image, description, available, category, originalPrice, summary
@@ -133,6 +135,13 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 height={96}
                 className="object-cover rounded-lg cursor-pointer"
               />
+               <Image
+                src="/shop3.png"
+                alt="Thumbnail 1"
+                width={96}
+                height={96}
+                className="object-cover rounded-lg cursor-pointer"
+              />
               <Image
                 src="/shop5.png"
                 alt="Thumbnail 2"
@@ -150,7 +159,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             </div>
 
             {/* Main Product Image */}
-            <div className="mt-12">
+            <div className="">
               {food.image && (
                 <Image
                   src={urlFor(food.image).url()}
@@ -278,7 +287,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
       `)
               ).map((product: any, index: number) => (
                 <Link
-                  href={`/food/${product.slug}`}
+                  href={`${product.slug}`}
                   key={`${product.slug}-${index}`}
                 >
                   <div className="border p-4 rounded-lg hover:shadow-md transition">
@@ -294,6 +303,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                     <h4 className="mt-2 text-lg font-semibold">
                       {product.foodName}
                     </h4>
+                   
                   </div>
                 </Link>
               ))}

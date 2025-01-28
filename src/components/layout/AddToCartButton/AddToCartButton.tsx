@@ -17,10 +17,10 @@ const AddToCartButton = ({ food }: { food: { id: string; name: string; price: nu
       icon: 'success',
       title: `Do you want to add ${food.name} to the cart? If yes, click OK`,
       showConfirmButton: true,
-      showCancelButton: false, // Cancel button nahi dikhana
+      showCancelButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        // Sirf tab execute hoga jab user "OK" par click karega
+      
         addToCart({
           id: food.id,
           name: food.name,
