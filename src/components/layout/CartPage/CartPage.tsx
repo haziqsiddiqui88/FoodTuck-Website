@@ -5,7 +5,7 @@ import { useCart } from '../../../app/context/CartContext';
 import Link from "next/link";
 import { Search, ShoppingBag, User } from "lucide-react";
 
-const CartPage = () => {
+const CartPage =() => {
   const { cart, updateQuantity, removeFromCart } = useCart();
 
   // Function to calculate the total price for an item

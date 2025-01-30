@@ -1,11 +1,13 @@
+
 import { Search, ShoppingBag, User } from "lucide-react";
 import { client } from "@/sanity/lib/client";
-
 import Link from "next/link";
 import React from "react";
-
 import ShopProduct from "@/components/layout/ShopProduct/ShopProduct";
+import Searchbar from "@/components/layout/Searchbar/Searchbar";
+
 export const revalidate = 60; //seconds
+
 const Shop = async () => {
   const query = `*[_type == "food"]{
     _id,
@@ -19,7 +21,6 @@ const Shop = async () => {
     "slug": slug.current
   }`;
   const foods = await client.fetch(query);
-  
 
 
   return (
@@ -113,39 +114,26 @@ const Shop = async () => {
           {/* Sort and Filter Section */}
           <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
             <div className="flex flex-wrap gap-2 items-center">
-              <p className="p-2">Sort By:</p>
-              <select className="border text-gray-600 p-2 w-[180px] rounded-md">
-                <option>Newest</option>
-                <option>Oldest</option>
-              </select>
-              <p className="p-2">Show:</p>
-              <select className="border text-gray-600 p-2 w-[180px] rounded-md">
+            <p className="p-2">Category:</p>
+            <select
+       
+        className=" p-3 text-left relative w-[190px] max-w-xs bg-white border border-gray-600 rounded-md shadow-md focus:ring-2 focus:ring-orange-500"
+      >
+         <option>Select a Category </option> 
+        
+      </select>
+             
+              <p className="p-2">SortBy:</p>
+              <select className=" p-3 text-left relative w-[190px] max-w-xs bg-white border border-gray-600 rounded-md shadow-md focus:ring-2 focus:ring-orange-500">
                 <option>Default</option>
                 <option>Popular</option>
               </select>
             </div>
-            <div className="flex items-center w-full md:w-[350px] h-[50px] rounded-md overflow-hidden">
-              <input
-                type="text"
-                placeholder="Search Your Product"
-                className="flex-grow px-4 py-2 border-[1px] bg-transparent focus:outline-none"
-              />
-              <Link href="/error">
-                <button className="px-4 py-2 bg-[#FF9F0D] h-[43px] hover:text-orange-500 text-white font-medium">
-                  <Search />
-                </button>
-              </Link>
-            </div>
+            <Searchbar />
           </div>
-         {/* Foods Products */}
+          {/* Foods Products */}
           <div className="mt-[20px] mb-[20px] lg:px-[20px]">
-          
-         
             <ShopProduct foods={foods} />
-         
-
-         
-
           </div>
         </div>
       </div>

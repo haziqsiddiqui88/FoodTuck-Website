@@ -4,7 +4,8 @@ import Link from "next/link"
 import { HiX } from "react-icons/hi";
 import { HiOutlineMenu } from "react-icons/hi";
 import { useState } from "react";
-export default function Navbar1() {
+import Searchbar from "@/components/layout/Searchbar/Searchbar";
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div>
@@ -62,17 +63,10 @@ export default function Navbar1() {
 
             {/* Search and Cart */}
             <div className="hidden sm:flex items-center space-x-4">
-              <div className="flex items-center bg-transparent border border-[#FF9F0D] rounded-full px-4 py-2">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="bg-transparent outline-none w-32 lg:w-64"
-                />
-                
-                <Search className="h-5 w-5 cursor-pointer text-gray-400" />
-              </div>
+              <Searchbar />
+             
               <Link href="/cart" className="relative">
-                <HiOutlineShoppingBag className="hover:text-[#FF9F0D] h-[24px] w-[24px]" />
+                <HiOutlineShoppingBag className="hover:text-[#FF9F0D] h-[32px] w-[24px]" />
               </Link>
             </div>
           </div>

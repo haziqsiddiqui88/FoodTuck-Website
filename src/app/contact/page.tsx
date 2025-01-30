@@ -1,10 +1,21 @@
-
+'use client';
 import React from 'react'
 import Link from 'next/link'
 import { Search, ShoppingBag, User } from 'lucide-react'
 import Image from 'next/image'
+import Searchbar from '@/components/layout/Searchbar/Searchbar'
+import { useState } from 'react';
+
+
+  
+
 
 const page = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const toggleSearch = () => {
+    setIsSearchOpen(prevState => !prevState);
+  };
   
   return (
   
@@ -45,12 +56,18 @@ const page = () => {
 
           {/* Right Icons */}
           <div className="flex items-center gap-4">
-          <Link href="/error" >
-            <button className="text-white hover:text-orange-500">
-              <Search className=" h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </button>
-            </Link>
+          <div>
+      <button 
+        className="text-white hover:text-orange-500" 
+        onClick={toggleSearch}
+      >
+        <Search className="h-5 w-5" />
+        <span className="sr-only">Search</span>
+      </button>
+
+      {isSearchOpen && <Searchbar />} 
+    </div>
+           
             <Link
             href="/account">
             <button className="text-white hover:text-orange-500">

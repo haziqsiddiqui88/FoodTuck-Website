@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Navbar1 from "./components/Navbar1";
+
 import { GrFacebookOption } from "react-icons/gr";
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
@@ -17,6 +17,7 @@ import FoodCategory from "@/components/layout/FoodCategory/FoodCategory";
 import RestaurantProcess from "@/components/layout/RestaurantProcess/RestaurantProcess";
 import BlogPost from "@/components/layout/BlogPost/BlogPost";
 import MenuPost from "@/components/layout/MenuPost/MenuPost";
+import Navbar from "./navbar/Navbar";
 
 const testimonials = [
   {
@@ -89,7 +90,7 @@ export default function Home() {
   const router = useRouter();
   return (
     <div className=" bg-black min-h-screen">
-      <Navbar1 />
+      <Navbar />
 
       {/* first layout */}
       <div className="  text-white   relative overflow-hidden">
@@ -153,76 +154,69 @@ export default function Home() {
       {/* Second layout */}
 
       <div className=" bg-black text-white pt-20 relative overflow-hidden">
-  <div className="container mx-auto px-4 h-full">
-    <div className="grid md:grid-cols-2 gap-8 items-center h-full py-12">
-      {/* Left Content */}
-      <div className="space-y-6 mx-auto">
-        <p className="font-playwrite text-[#ff9f0d] text-3xl">About us</p>
-        <h1 className="text-3xl md:text-6xl font-bold leading-tight">
-          <span className="text-[#ff9f0d]">We </span>Create the best
-          <br />
-          foody <span>product</span>
-        </h1>
-        <p className="text-gray-400 max-w-md">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius sed pharetra dictum neque massa congue
-        </p>
-        <ul className="space-y-2">
-          <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
-          <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
-          <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
-        </ul>
-        <Link
-          href="/menu"
-          className="inline-block bg-[#ff9f0d] text-white px-8 py-3 rounded-full hover:bg-orange-600 transition-colors"
-        >
-          Read More
-        </Link>
+        <div className="container mx-auto px-4 h-full">
+          <div className="grid md:grid-cols-2 gap-8 items-center h-full py-12">
+            {/* Left Content */}
+            <div className="space-y-6 mx-auto">
+              <p className="font-playwrite text-[#ff9f0d] text-3xl">About us</p>
+              <h1 className="text-3xl md:text-6xl font-bold leading-tight">
+                <span className="text-[#ff9f0d]">We </span>Create the best
+                <br />
+                foody <span>product</span>
+              </h1>
+              <p className="text-gray-400 max-w-md">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius
+                sed pharetra dictum neque massa congue
+              </p>
+              <ul className="space-y-2">
+                <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
+                <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
+                <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
+              </ul>
+              <Link
+                href="/menu"
+                className="inline-block bg-[#ff9f0d] text-white px-8 py-3 rounded-full hover:bg-orange-600 transition-colors"
+              >
+                Read More
+              </Link>
+            </div>
+
+            {/* Right Content - Hero Image */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-4xl">
+              {/* Top Image */}
+              <div className="relative w-full h-64 lg:col-span-2">
+                <Image
+                  src="/home-second1.png"
+                  alt="Avocado Toast with Egg"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              {/* Bottom Left Image */}
+              <div className="relative w-full h-64">
+                <Image
+                  src="/home-second2.png"
+                  alt="Grilled Sandwich with Salad"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              {/* Bottom Right Image */}
+              <div className="relative w-full h-64">
+                <Image
+                  src="/home-second3.png"
+                  alt="Fresh Veggie Sandwich"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* Right Content - Hero Image */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-4xl">
-        {/* Top Image */}
-        <div className="relative w-full h-64 lg:col-span-2">
-          <Image
-            src="/home-second1.png"
-            alt="Avocado Toast with Egg"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-        {/* Bottom Left Image */}
-        <div className="relative w-full h-64">
-          <Image
-            src="/home-second2.png"
-            alt="Grilled Sandwich with Salad"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-        {/* Bottom Right Image */}
-        <div className="relative w-full h-64">
-          <Image
-            src="/home-second3.png"
-            alt="Fresh Veggie Sandwich"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-lg shadow-md hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      </div>
-
-
-
-
-
-
-    </div>
-  </div>
-</div>
-
-
 
       {/*food-catogories */}
 

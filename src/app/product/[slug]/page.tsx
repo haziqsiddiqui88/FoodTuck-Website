@@ -6,6 +6,8 @@ import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import DescReview from "@/components/layout/DescReview/DescReview";
 import AddToCartButton from "@/components/layout/AddToCartButton/AddToCartButton";
+import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelector";
+import Rating from "@/components/layout/Rating/Rating";
 
 
 export const revalidate = 60; // seconds
@@ -173,17 +175,18 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           </div>
 
           {/* Product Details */}
-          <div className="lg:mt-16">
+          <div className="lg:mt-16 ">
             <h2 className="text-3xl font-bold font-playwrite">
               {food.foodName}
             </h2>
-            <p className="text-gray-600 font-sans mt-2">{food.description}</p>
+            <p className="text-gray-600 font-sans mt-2 border-b pb-4">{food.description}</p>
+            
             <div className="flex mt-4 space-x-3">
               {/* Original price */}
               <p className="text-xl text-red-600 font-bold line-through">
                 ${food.originalPrice}
               </p>
-
+              
               <div className="flex gap-2 food-center">
                 {/* Discounted price */}
                 <p className="font-bold text-xl text-black">${food.price}</p>
@@ -199,29 +202,36 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                   </p>
                 )}
               </div>
+              
+      
             </div>
-            <div className="flex items-center  gap-2 mt-4">
-              <input
-                type="number"
-                defaultValue={1}
-                className="w-16 text-center border rounded-lg mt-2 "
-              />
-              <AddToCartButton
+                     {/* Rating and Reviews */}
+      <div className="flex items-center space-x-2 mt-3 text-gray-600 text-md">
+        <div >
+          <Rating />
+        </div>
+        <span>| 5.0 Rating | 22 Review</span>
+      </div>
+             {/* Category */}
+      <div className="mt-3"><p className="text-gray-500 ">Dictum/cursus/Risus</p></div>
+     <div className=" mt-2 flex items-center gap-[20px] border-b pb-4">
+          <QuantitySelector />
+          <AddToCartButton
                 food={{
                   id: food._id,
                   name: food.foodName,
                   price: food.price,
                   image: food.imageUrl || "/default-image.jpeg",
+                
                 }}
               />
-            </div>
-
-            <div className="text-sm text-gray-600 mt-4">
-              <p>Category: {food.category}</p>
-              <p>Tags: {food.tags}</p>
+              </div>
+           
+             
+            
             </div>
           </div>
-        </div>
+        
 
         {/* Tabs and Similar Products */}
         <div className="mt-12">
@@ -294,8 +304,8 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                     {product.image && (
                       <Image
                         src={urlFor(product.image).url()}
-                        width={300} // Set a fixed width
-                        height={200} // Set a fixed height
+                        width={300} 
+                        height={200} 
                         alt={product.foodName}
                         className="w-full h-48 object-cover rounded"
                       />
@@ -308,10 +318,11 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 </Link>
               ))}
             </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+   
   );
 };
 
