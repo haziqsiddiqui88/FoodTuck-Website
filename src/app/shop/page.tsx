@@ -1,5 +1,5 @@
 
-import { Search, ShoppingBag, User } from "lucide-react";
+import {  ShoppingBag, User } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import Link from "next/link";
 import React from "react";
@@ -66,12 +66,7 @@ const Shop = async () => {
 
             {/* Right Icons */}
             <div className="flex items-center gap-4">
-              <Link href="/error">
-                <button className="text-white hover:text-orange-500">
-                  <Search className=" h-5 w-5" />
-                  <span className="sr-only">Search</span>
-                </button>
-              </Link>
+              <Searchbar />
               <Link href="/account">
                 <button className="text-white hover:text-orange-500">
                   <User className="h-5 w-5" />

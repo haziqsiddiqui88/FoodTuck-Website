@@ -18,7 +18,7 @@ export async function generateStaticParams() {
   const slugs = await client.fetch(query);
 
 
-  return slugs.map((item: { slug: string }) => ({
+  return slugs.map((item: any) => ({
     params: { slug: item.slug },
   }));
 }
@@ -295,7 +295,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           foodName, price, image, "slug": slug.current
         }
       `)
-              ).map((product: any, index: number) => (
+              ).map((product:  { foodName: string; price: number; image: string; slug: string }, index: number) => (
                 <Link
                   href={`${product.slug}`}
                   key={`${product.slug}-${index}`}

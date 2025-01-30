@@ -1,9 +1,10 @@
 import React from 'react'
-import { Search, ShoppingBag, User } from 'lucide-react'
+import { ShoppingBag, User } from 'lucide-react'
 
 
 import Link from 'next/link'
 import FaqItem from '@/components/layout/FaqItem/FaqItem'
+import Searchbar from '@/components/layout/Searchbar/Searchbar'
 
 export default function page() {
 
@@ -99,10 +100,7 @@ export default function page() {
       {/* Right Icons */}
       <div className="flex items-center gap-4">
         
-        <button className="text-white hover:text-orange-500">
-          <Search className=" h-5 w-5" />
-          <span className="sr-only">Search</span>
-        </button>
+        <Searchbar />
         <Link
         href="/account">
         <button className="text-white hover:text-orange-500">

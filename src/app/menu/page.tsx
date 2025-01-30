@@ -8,7 +8,8 @@ import StarterMenu from "@/components/layout/StarterMenu/StarterMenu";
 import PartnersAndClients from "@/components/layout/PartnerClient/PartnerClient";
 import Link from 'next/link'
 
-import { Search, User, ShoppingBag,} from 'lucide-react'
+import {  User, ShoppingBag,} from 'lucide-react'
+import Searchbar from "@/components/layout/Searchbar/Searchbar";
 
 
 export default function Menu() {
@@ -55,12 +56,8 @@ export default function Menu() {
 
           {/* Right Icons */}
           <div className="flex items-center gap-4">
-          <Link href="/error" >
-            <button className="text-white hover:text-orange-500">
-              <Search className=" h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </button>     
-            </Link>      <Link
+          <Searchbar />
+               <Link
             href="/account">
             <button className="text-white hover:text-orange-500">
               <User className="h-5 w-5" />

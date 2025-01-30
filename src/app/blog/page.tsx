@@ -11,6 +11,7 @@ import BlogMenu from '@/components/layout/BlogMenu/BlogMenu';
 import BlogTag from '@/components/layout/BlogTag/BlogTag';
 import BlogGallery from '@/components/layout/BlogGallery/BlogGallery';
 import FollowUs from '@/components/layout/AboutItem/FollowUS/FollowUs';
+import Searchbar from '@/components/layout/Searchbar/Searchbar';
 
 export default function Page() {
   return (
@@ -37,11 +38,7 @@ export default function Page() {
 
             {/* Right Icons */}
             <div className="flex items-center gap-4">
-              <Link href="/error">
-                <button className="text-white hover:text-orange-500">
-                  <Search className="h-5 w-5" />
-                </button>
-              </Link>
+              <Searchbar />
               <Link href="/account">
                 <button className="text-white hover:text-orange-500">
                   <User className="h-5 w-5" />

@@ -1,4 +1,4 @@
-import { Search } from "lucide-react"
+
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Link from "next/link"
 import { HiX } from "react-icons/hi";

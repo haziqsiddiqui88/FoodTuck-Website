@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, ShoppingBag, User } from "lucide-react";
+import { ShoppingBag, User } from "lucide-react";
 
 import Link from "next/link";
 import { LuUserRound } from "react-icons/lu";
@@ -8,6 +8,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { TbLockPassword } from "react-icons/tb";
 import { FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import Searchbar from "@/components/layout/Searchbar/Searchbar";
 
 export default function page() {
   return (
@@ -53,12 +54,7 @@ export default function page() {
 
             {/* Right Icons */}
             <div className="flex items-center gap-4">
-            <Link href="/error" >
-              <button className="text-white hover:text-orange-500">
-                <Search className=" h-5 w-5" />
-                <span className="sr-only">Search</span>
-              </button>
-              </Link>
+           <Searchbar />
               <Link href="/account">
                 <button className="text-orange-500">
                   <User className="h-5 w-5" />
