@@ -1,38 +1,101 @@
 "use client";
 
 import Image from "next/image";
-import { useCart } from '../../../app/context/CartContext';
+import { useState} from "react";
+import { useCart } from "../../../app/context/CartContext";
+import { useUser } from "@/app/context/UserContext";
+
 import Link from "next/link";
 import { Search, ShoppingBag, User } from "lucide-react";
+import { createCheckoutSession, Metadata } from "../../../../action/createCheckoutSession";
 
-const CartPage =() => {
+const CartPage = () => {
+const [loading, setLoading]= useState(false)
+
   const { cart, updateQuantity, removeFromCart } = useCart();
+  const { user } = useUser();
+  const [coupon, setCoupon] = useState(""); // Store entered coupon code
+  const [discount, setDiscount] = useState(0); // Store discount amount
+
+  // Updated validCoupons with index signature
+  const validCoupons: { [key: string]: number } = {
+    SAVE10: 10,
+    FOOD20: 20,
+  };
 
   // Function to calculate the total price for an item
   const calculateTotalPrice = (price: number, quantity: number) => {
-    return (price * quantity).toFixed(2); // Ensure the price is formatted to 2 decimal places
+    return (price * quantity).toFixed(2); // Ensure price is formatted to 2 decimal places
   };
 
+ 
+
   // Calculate the grand total for all items in the cart
-  const grandTotal = cart
-    .reduce((total, item) => total + item.price * item.quantity, 0)
-    .toFixed(2);
+  const cartTotal = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+  const discountedTotal = (cartTotal - discount).toFixed(2); // Apply discount
+
+  // Handle coupon code
+  const applyCoupon = () => {
+    if (validCoupons[coupon]) {
+      setDiscount(validCoupons[coupon]); // Apply discount
+    } else {
+      alert("Invalid coupon code!"); // Error message
+      setDiscount(0); // Reset discount if invalid
+    }
+  };
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    try {
+    
+      const modifiedCartItems = cart.map(item => ({
+        product: {
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+        
+        },
+        quantity: item.quantity,
+      }));
+  
+      const metadata: Metadata = {
+        orderNumber: crypto.randomUUID(),
+        customerName: user?.fullName ?? "Unknown",
+        customerEmail: user?.emailAddress[0]?.emailAddress ?? "Unknown",
+        ClerkUserId: user!.id,
+      };
+  
+      const checkoutUrl = await createCheckoutSession(modifiedCartItems, metadata);
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      }
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+    
+    
+  
 
   return (
-    
-       <div className="min-h-screen">
+    <div className="min-h-screen">
+      {/* Navbar & Hero Section */}
       <header className="top-0 left-0 right-0 z-50">
         <nav className="bg-black px-4 md:px-6">
           <div className="mx-auto flex h-16 max-w-7xl items-center justify-between">
-            {/* Logo */}
             <Link
               href="/"
               className="flex items-center text-xl font-bold text-white"
             >
               Food<span className="text-orange-500">tuck</span>
             </Link>
-
-            {/* Desktop Navigation */}
             <div className="hidden items-center gap-8 md:flex">
               <Link href="/" className="text-white hover:text-orange-500">
                 Home
@@ -49,7 +112,7 @@ const CartPage =() => {
               <Link href="/about" className="text-white hover:text-orange-500">
                 About
               </Link>
-              <Link href="/shop" className=" text-orange-500">
+              <Link href="/shop" className="text-orange-500">
                 Shop
               </Link>
               <Link
@@ -59,32 +122,19 @@ const CartPage =() => {
                 Contact
               </Link>
             </div>
-
-            {/* Right Icons */}
             <div className="flex items-center gap-4">
               <Link href="/error">
-                <button className="text-white hover:text-orange-500">
-                  <Search className=" h-5 w-5" />
-                  <span className="sr-only">Search</span>
-                </button>
+                <Search className="h-5 w-5 text-white hover:text-orange-500" />
               </Link>
               <Link href="/account">
-                <button className="text-white hover:text-orange-500">
-                  <User className="h-5 w-5" />
-                  <span className="sr-only">Account</span>
-                </button>
+                <User className="h-5 w-5 text-white hover:text-orange-500" />
               </Link>
               <Link href="/cart">
-                <button className="text-white hover:text-orange-500">
-                  <ShoppingBag className="h-5 w-5" />
-                  <span className="sr-only">Cart</span>
-                </button>
+                <ShoppingBag className="h-5 w-5 text-white hover:text-orange-500" />
               </Link>
             </div>
           </div>
         </nav>
-
-        {/* Hero Section */}
         <div
           className="relative h-[300px] w-full bg-cover bg-center"
           style={{ backgroundImage: `url('/home-pic-1.png')` }}
@@ -102,10 +152,11 @@ const CartPage =() => {
           </div>
         </div>
       </header>
-      {/* navbar end */}
+
+      {/* Cart Section */}
       <div className="p-4 sm:p-8">
         {cart.length === 0 ? (
-          <p className="text-2xl  font-thin">Your cart is empty.</p>
+          <p className="text-2xl font-thin">Your cart is empty.</p>
         ) : (
           <div className="space-y-4 max-w-6xl mx-auto">
             <h1 className="text-2xl sm:text-3xl font-bold mb-6">Cart</h1>
@@ -133,44 +184,82 @@ const CartPage =() => {
                     </p>
                   </div>
                 </div>
-                <div className="flex flex-row gap-4 sm:flex-row items-center text-lg space-y-2 sm:space-y-0 sm:space-x-2">
+                <div className="flex flex-row gap-4 sm:flex-row items-center">
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    className="px-3 py-1 sm:px-4 sm:py-2 bg-white text-black text-sm sm:text-lg rounded border border-gray-300 hover:bg-gray-100 transition"
+                    className="px-3 py-1 bg-white text-black border border-gray-300 rounded hover:bg-gray-100 transition"
                     disabled={item.quantity <= 1}
                   >
                     -
                   </button>
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="px-3 py-1 sm:px-4 sm:py-2 bg-white text-black text-sm sm:text-lg rounded border border-gray-300 hover:bg-gray-100 transition"
+                    className="px-3 py-1 bg-white text-black border border-gray-300 rounded hover:bg-gray-100 transition"
                   >
                     +
                   </button>
                   <button
                     onClick={() => removeFromCart(item.id)}
-                    className="px-3 py-1 sm:px-4 sm:py-2 bg-orange-500 text-white text-sm sm:text-base rounded hover:bg-orange-700 transition"
+                    className="px-3 py-1 bg-[#ff9f0d] text-white rounded hover:bg-orange-700 transition"
                   >
                     Remove
                   </button>
                 </div>
               </div>
             ))}
+            <div className="mt-6 space-y-4 sm:space-y-0 sm:flex sm:gap-6">
+              {/* Coupon Code */}
+              <div className="w-full sm:w-1/2 border p-4 rounded-lg shadow-md">
+                <h2 className="text-lg font-bold mb-3">Coupon Code</h2>
+                <p className="text-gray-600 mb-2">
+                  Enter your coupon code to get a discount.
+                </p>
+                <div className="flex">
+                  <input
+                    type="text"
+                    value={coupon}
+                    onChange={(e) => setCoupon(e.target.value)}
+                    placeholder="Enter Here"
+                    className="border p-2 flex-grow rounded-l-lg"
+                  />
+                  <button
+                    onClick={applyCoupon}
+                    className="bg-[#ff9f0d] text-white px-4 py-2 rounded-r-lg hover:bg-orange-600"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
 
-            <div className="mt-6 text-left">
-              <p className="text-xl font-semibold">Total: ${grandTotal}</p>
+              {/* Order Summary */}
+              <div className="w-full sm:w-1/2 border p-4 rounded-lg shadow-md">
+                <h2 className="text-lg font-bold mb-3">Total Bill</h2>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Cart Subtotal</span>
+                    <span>${cartTotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Discount</span>
+                    <span>-${discount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-bold">
+                    <span>Total Amount</span>
+                    <span>${discountedTotal}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="mt-6 text-right">
-              <Link href="/generate-tracking">
-                <button
-                  disabled={cart.length === 0}
-                  className={`px-4 py-2 sm:px-6 sm:py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition ${
-                    cart.length === 0 ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  Checkout
+
+            {/* Checkout Button */}
+            <div className="mt-6  text-center sm:text-right">
+              
+                <button 
+                onClick={handleCheckout}
+                className="px-4 py-3 w-full sm:w-1/2 bg-[#ff9f0d] text-white font-semibold rounded hover:bg-yellow-600 transition">
+                  Proceed to Checkout
                 </button>
-              </Link>
+              
             </div>
           </div>
         )}

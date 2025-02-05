@@ -1,11 +1,13 @@
 "use client";
 
 import CartPage from "@/components/layout/CartPage/CartPage";
-
+import { UserProvider } from "../context/UserContext";
 
 const Cart = () => {
   return ( 
-  <div><CartPage /></div>
+    <UserProvider>
+    <CartPage />
+  </UserProvider>
   )
 };
 

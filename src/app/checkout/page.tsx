@@ -1,9 +1,26 @@
+"use client";
+
 import React from "react";
 import { Search, ShoppingBag, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useCart } from '../context/CartContext'
+import { useRouter } from "next/navigation";
+import Searchbar from "@/components/layout/Searchbar/Searchbar";
 
-export default function checkout() {
+export default function Checkout() {
+  const { cart, cartTotal, discount, clearCart } = useCart();
+  const router = useRouter();
+
+  const handleOrderPlacement = () => {
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+    alert("Order placed successfully!");
+    clearCart(); 
+    router.push("/order-success"); 
+  };
   return (
     <div className="min-h-screen">
       <header className="top-0 left-0 right-0 z-50">
@@ -47,10 +64,7 @@ export default function checkout() {
 
             {/* Right Icons */}
             <div className="flex items-center  gap-4 ">
-              <button className="text-white hover:text-orange-500">
-                <Search className="h-5 w-5" />
-                <span className="sr-only">Search</span>
-              </button>
+             <Searchbar />
               <Link href="/account">
                 <button className="text-white hover:text-orange-500">
                   <User className="h-5 w-5" />
@@ -90,8 +104,8 @@ export default function checkout() {
       {/* navbar end */}
 
       <div className="flex flex-col md:flex-row gap-8 px-4 py-6">
-        {/* Left Side: Shipping and Billing Address */}
-        <div className="flex-1 bg-white text-black p-6 mt-12 ">
+      {/* Left Side: Shipping and Billing Address */}
+      <div className="flex-1 bg-white text-black p-6 mt-12 ">
           <h2 className="text-lg font-bold mb-4">Shipping Address</h2>
           <form className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -139,19 +153,10 @@ export default function checkout() {
               </select>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <select name="City" className="w-full p-2 bg-white border-[1px] ">
-                <option value="Select">Choose City</option>
-                <option value="karachi">Karachi</option>
-                <option value="beijing">Beijing</option>
-                <option value="new-york">New York</option>
-                <option value="tokyo">Tokyo</option>
-                <option value="kabul">Kabul</option>
-                <option value="buenos-aires">Buenos Aires</option>
-                <option value="mumbai">Mumbai</option>
-                <option value="sydney">Sydney</option>
-                <option value="dhaka">Dhaka</option>
-                <option value="jerusalem">Jerusalem</option>
-              </select>
+              <input className="w-full p-2 bg-white border-[1px] "
+              type="text"
+              placeholder="City"
+              />
               <input
                 type="text"
                 placeholder="Zip code"
@@ -182,6 +187,7 @@ export default function checkout() {
           </form>
 
           <div className="grid grid-cols-2  mt-5">
+            
             <button className=" w-[390px] h-[40px] border-[1px]  hover:bg-gray-500 text-black py-2 px-4 ">
               Back to cart
             </button>
@@ -190,60 +196,50 @@ export default function checkout() {
             </button>
           </div>
         </div>
-
         {/* Right Side: Order Summary */}
-        <div className="w-full md:w-1/3 bg-white border-[1px] mt-8 mb-14  text-black p-6 ">
+        <div className="w-full md:w-1/3 bg-white border p-6">
+          <h2 className="text-lg font-bold mb-4">Order Summary</h2>
           <div className="space-y-4">
-            {/* Order Items */}
-            {[1, 2, 3].map((_, index) => (
-              <div key={index} className="flex items-center gap-4">
-                <Image
-                  src="/checkout-1.png"
-                  alt="Chicken Tikka Kabab"
-                  className="w-16 h-16  cursor-pointer hover:scale-105 transition-transform duration-300"
-                  width={83}
-                  height={88}
-                />
-                <div className="flex-1">
-                  <h3 className="text-sm font-semibold">Chicken Tikka Kabab</h3>
-                  <p className="text-sm">150 gm net</p>
-                  <p className="text-sm font-bold">$50</p>
+            {cart.map((item) => (
+              <div key={item.id} className="flex items-center gap-4">
+                <Image src={item.image} alt={item.name} width={50} height={50} className="w-16 h-16" />
+                <div>
+                  <h3 className="text-sm font-semibold">{item.name}</h3>
+                  <p className="text-sm">Qty: {item.quantity}</p>
+                  <p className="text-sm font-bold">${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
               </div>
             ))}
-
-            {/* Price Breakdown */}
-            <div className="text-sm space-y-2">
+            <div className="border-t pt-4">
               <div className="flex justify-between">
-                <p>Sub-total</p>
-                <p>$130</p>
+                <span>Subtotal</span>
+                <span>${cartTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
-                <p>Shipping</p>
-                <p>Free</p>
+                <span>Discount</span>
+                <span>-${discount.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between">
-                <p>Discount</p>
-                <p>25%</p>
-              </div>
-              <div className="flex justify-between">
-                <p>Tax</p>
-                <p>$54.76</p>
-              </div>
-              <div className="  w-[390px] border-t-[1px]"></div>
-              <div className="flex justify-between text-lg font-bold">
-                <p>Total</p>
-                <p>$432.65</p>
+              <div className="flex justify-between font-bold">
+                <span>Total</span>
+                <span>${(cartTotal - discount).toFixed(2)}</span>
               </div>
             </div>
-
-            {/* Place Order Button */}
-            <button className="mt-4 w-full bg-[#ff9f0d] hover:bg-orange-600 text-black py-2 px-4 ">
-              Place an order
+            <button
+              onClick={handleOrderPlacement}
+              className="w-full bg-[#ff9f0d] hover:bg-orange-600 text-white py-2"
+            >
+              Place Order
             </button>
           </div>
         </div>
       </div>
-    </div>
+
+
+
+
+
+      
+      </div>
+   
   );
 }

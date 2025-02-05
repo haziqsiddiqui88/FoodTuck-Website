@@ -7,7 +7,7 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  image: string; // Add image URL to the CartItem interface
+  image: string; // Image URL
 }
 
 interface CartContextType {
@@ -15,15 +15,20 @@ interface CartContextType {
   addToCart: (item: CartItem) => void;
   updateQuantity: (id: string, quantity: number) => void;
   removeFromCart: (id: string) => void;
+  clearCart: () => void; // Function to clear the cart
+  cartTotal: number;
+  discount: number;
+  setDiscount: (value: number) => void; // Function to set discount
 }
+
+
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Initialize cart state with an empty array (to avoid hydration mismatch)
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [discount, setDiscount] = useState<number>(0); // Default discount is 0%
 
-  // Load cart from local storage after component mounts (client-side only)
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
@@ -31,22 +36,21 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  // Save cart to local storage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (item: CartItem) => {
-    const existingItem = cart.find((product) => product.id === item.id);
-    if (existingItem) {
-      setCart((prev) =>
-        prev.map((product) =>
+    setCart((prev) => {
+      const existingItem = prev.find((product) => product.id === item.id);
+      if (existingItem) {
+        return prev.map((product) =>
           product.id === item.id ? { ...product, quantity: product.quantity + 1 } : product
-        )
-      );
-    } else {
-      setCart((prev) => [...prev, { ...item, quantity: 1 }]);
-    }
+        );
+      } else {
+        return [...prev, { ...item, quantity: 1 }];
+      }
+    });
   };
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -63,8 +67,18 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setCart((prev) => prev.filter((product) => product.id !== id));
   };
 
+  const clearCart = () => {
+    setCart([]); // Empty the cart
+  };
+
+  // Calculate cart total before discount
+  const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  const cartTotal = subtotal - (subtotal * discount) / 100; // Apply discount percentage
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart, cartTotal, discount, setDiscount }}
+    >
       {children}
     </CartContext.Provider>
   );

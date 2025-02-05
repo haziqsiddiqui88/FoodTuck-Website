@@ -159,7 +159,7 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row md:justify-between items-center h-auto p-5 md:p-8">
         {/* Copyright Section */}
         <p className="text-white font-normal text-center md:text-left md:ml-0">
-          Copyright 2022 by Ayeman. All Rights Reserved.
+          Copyright 2025 by Haziq Siddiqui. All Rights Reserved.
         </p>
 
         {/* Social Icons */}
