@@ -34,7 +34,7 @@ const DescReview   = ({ food }: { food: Food }) => {
 
       <div className="p-3 font-sans  ">
         {activeTab === "description" && <p>{food.summary}</p>}
-        {activeTab === "reviews" && <p>No Reviews.</p>}
+        {activeTab === "reviews" && <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corrupti autem assumenda repudiandae minus quasi quia ab culpa. Iure perferendis placeat, non, neque doloribus consequuntur labore fugiat vitae, praesentium provident iste.</p>}
       </div>
       
     </div>

@@ -25,12 +25,14 @@ export async function generateStaticParams() {
 const Page = async ({ params }: { params: { slug: string } }) => {
   console.log("Params received:", params); // Debugging
 
-  if (!params || !params.slug) {
+  // Ensure `params` is awaited or handled asynchronously
+  const slug = params?.slug;
+
+  if (!slug) {
     return <div>Error: Invalid slug</div>;
   }
 
-  const { slug } = params;
-
+  // Fetch food data using the slug
   const query = `*[_type=='food' && slug.current=='${slug}'] {
     foodName, price, tags, image, description, available, category, originalPrice, summary, _id
   }[0]`;
