@@ -41,7 +41,7 @@ const CartPage = () => {
     }
   };
 
-  const { cartCount } = useCart();
+  
 
   return (
     <div className="min-h-screen">

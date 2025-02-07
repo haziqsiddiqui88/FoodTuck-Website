@@ -11,10 +11,10 @@ import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import { client } from "@/sanity/lib/client";
 import { getCartItems } from "@/lib/actions";
-import {  ShoppingBag, User } from "lucide-react";
+
 import { useUser } from "@/app/context/UserContext";
 import { createCheckoutSession, Metadata } from "../../../../action/createCheckoutSession";
-import Searchbar from "../Searchbar/Searchbar";
+
 import Navbar from "@/app/navbar/Navbar";
 // Define Food Type
 interface Food {
