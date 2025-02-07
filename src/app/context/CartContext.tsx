@@ -12,32 +12,35 @@ interface CartItem {
 
 interface CartContextType {
   cart: CartItem[];
+  cartCount: number;
   addToCart: (item: CartItem) => void;
   updateQuantity: (id: string, quantity: number) => void;
   removeFromCart: (id: string) => void;
-  clearCart: () => void; // Function to clear the cart
+  clearCart: () => void;
   cartTotal: number;
   discount: number;
-  setDiscount: (value: number) => void; // Function to set discount
+  setDiscount: (value: number) => void;
 }
-
-
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [discount, setDiscount] = useState<number>(0); // Default discount is 0%
+  const [cartCount, setCartCount] = useState<number>(0);
+  const [discount, setDiscount] = useState<number>(0);
 
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
-      setCart(JSON.parse(savedCart));
+      const parsedCart = JSON.parse(savedCart);
+      setCart(parsedCart);
+      setCartCount(parsedCart.reduce((count: number, item: CartItem) => count + item.quantity, 0));
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
+    setCartCount(cart.reduce((count, item) => count + item.quantity, 0));
   }, [cart]);
 
   const addToCart = (item: CartItem) => {
@@ -68,16 +71,16 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const clearCart = () => {
-    setCart([]); // Empty the cart
+    setCart([]);
+    setCartCount(0); // Reset cart count
   };
 
-  // Calculate cart total before discount
   const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  const cartTotal = subtotal - (subtotal * discount) / 100; // Apply discount percentage
+  const cartTotal = subtotal - (subtotal * discount) / 100;
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart, cartTotal, discount, setDiscount }}
+      value={{ cart, cartCount, addToCart, updateQuantity, removeFromCart, clearCart, cartTotal, discount, setDiscount }}
     >
       {children}
     </CartContext.Provider>

@@ -101,13 +101,13 @@ export default function Home() {
             <div className="hidden  sm:flex absolute top-10 h-[150px]   border-l-[1px] border-white  flex-col  ">
               {/* Add icons or links */}
               <div className="flex flex-col -ml-2 pt-40 space-y-7 ">
-                <a href="#">
+                <a href="error">
                   <GrFacebookOption className=" hover:text-[#FF9F0D]" />
                 </a>
-                <a href="#">
+                <a href="/error">
                   <FaTwitter className=" text-[#FF9F0D]" />
                 </a>
-                <a href="#">
+                <a href="/error">
                   <FaInstagram className="hover:text-[#FF9F0D]" />
                 </a>
               </div>
@@ -174,7 +174,7 @@ export default function Home() {
                 <li>✔️ Lorem ipsum dolor sit amet, consectetur</li>
               </ul>
               <Link
-                href="/menu"
+                href="/about"
                 className="inline-block bg-[#ff9f0d] text-white px-8 py-3 rounded-full hover:bg-orange-600 transition-colors"
               >
                 Read More

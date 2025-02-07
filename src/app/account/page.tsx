@@ -21,7 +21,7 @@ export default function page() {
               href="/"
               className="flex items-center text-xl font-bold text-white"
             >
-              Food<span className="text-orange-500">tuck</span>
+               FLAV<span className="text-orange-500">ORA</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -35,8 +35,8 @@ export default function page() {
               <Link href="/blog" className="text-white hover:text-orange-500">
                 Blog
               </Link>
-              <Link href="/pages" className="text-white hover:text-orange-500">
-                Pages
+              <Link href="/faq" className="text-white hover:text-orange-500">
+                Faq
               </Link>
               <Link href="/about" className="text-white hover:text-orange-500">
                 About

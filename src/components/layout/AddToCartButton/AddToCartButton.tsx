@@ -1,26 +1,19 @@
-
 "use client";
+import { useCart } from "../../../app/context/CartContext";
+import Swal from "sweetalert2";
 
-
-import { useCart } from '../../../app/context/CartContext';
-import Swal from 'sweetalert2';
 const AddToCartButton = ({ food }: { food: { id: string; name: string; price: number; image: string } }) => {
   const { addToCart } = useCart();
 
-
-
-
-
   const handleAddToCart = () => {
     Swal.fire({
-      position: 'top-right',
-      icon: 'success',
+      position: "top-right",
+      icon: "success",
       title: `Do you want to add ${food.name} to the cart? If yes, click OK`,
       showConfirmButton: true,
       showCancelButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-      
         addToCart({
           id: food.id,
           name: food.name,
@@ -31,6 +24,7 @@ const AddToCartButton = ({ food }: { food: { id: string; name: string; price: nu
       }
     });
   };
+
   return (
     <button
       onClick={handleAddToCart}

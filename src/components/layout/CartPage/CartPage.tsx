@@ -1,19 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useState} from "react";
+import { useState } from "react";
 import { useCart } from "../../../app/context/CartContext";
-import { useUser } from "@/app/context/UserContext";
 
 import Link from "next/link";
-import { Search, ShoppingBag, User } from "lucide-react";
-import { createCheckoutSession, Metadata } from "../../../../action/createCheckoutSession";
+
+import Navbar from "@/app/navbar/Navbar";
 
 const CartPage = () => {
-const [loading, setLoading]= useState(false)
-
   const { cart, updateQuantity, removeFromCart } = useCart();
-  const { user } = useUser();
   const [coupon, setCoupon] = useState(""); // Store entered coupon code
   const [discount, setDiscount] = useState(0); // Store discount amount
 
@@ -27,8 +23,6 @@ const [loading, setLoading]= useState(false)
   const calculateTotalPrice = (price: number, quantity: number) => {
     return (price * quantity).toFixed(2); // Ensure price is formatted to 2 decimal places
   };
-
- 
 
   // Calculate the grand total for all items in the cart
   const cartTotal = cart.reduce(
@@ -47,93 +41,14 @@ const [loading, setLoading]= useState(false)
     }
   };
 
-  const handleCheckout = async () => {
-    setLoading(true);
-    try {
-    
-      const modifiedCartItems = cart.map(item => ({
-        product: {
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          image: item.image,
-        
-        },
-        quantity: item.quantity,
-      }));
-  
-      const metadata: Metadata = {
-        orderNumber: crypto.randomUUID(),
-        customerName: user?.fullName ?? "Unknown",
-        customerEmail: user?.emailAddress[0]?.emailAddress ?? "Unknown",
-        ClerkUserId: user!.id,
-      };
-  
-      const checkoutUrl = await createCheckoutSession(modifiedCartItems, metadata);
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
-      }
-    } catch (error) {
-      console.error("Error creating checkout session:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-    
-    
-  
+  const { cartCount } = useCart();
 
   return (
     <div className="min-h-screen">
       {/* Navbar & Hero Section */}
       <header className="top-0 left-0 right-0 z-50">
         <nav className="bg-black px-4 md:px-6">
-          <div className="mx-auto flex h-16 max-w-7xl items-center justify-between">
-            <Link
-              href="/"
-              className="flex items-center text-xl font-bold text-white"
-            >
-              Food<span className="text-orange-500">tuck</span>
-            </Link>
-            <div className="hidden items-center gap-8 md:flex">
-              <Link href="/" className="text-white hover:text-orange-500">
-                Home
-              </Link>
-              <Link href="/menu" className="text-white hover:text-orange-500">
-                Menu
-              </Link>
-              <Link href="/blog" className="text-white hover:text-orange-500">
-                Blog
-              </Link>
-              <Link href="/pages" className="text-white hover:text-orange-500">
-                Pages
-              </Link>
-              <Link href="/about" className="text-white hover:text-orange-500">
-                About
-              </Link>
-              <Link href="/shop" className="text-orange-500">
-                Shop
-              </Link>
-              <Link
-                href="/contact"
-                className="text-white hover:text-orange-500"
-              >
-                Contact
-              </Link>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link href="/error">
-                <Search className="h-5 w-5 text-white hover:text-orange-500" />
-              </Link>
-              <Link href="/account">
-                <User className="h-5 w-5 text-white hover:text-orange-500" />
-              </Link>
-              <Link href="/cart">
-                <ShoppingBag className="h-5 w-5 text-white hover:text-orange-500" />
-              </Link>
-            </div>
-          </div>
+          <Navbar />
         </nav>
         <div
           className="relative h-[300px] w-full bg-cover bg-center"
@@ -147,7 +62,7 @@ const [loading, setLoading]= useState(false)
                 Home
               </Link>
               <span className="text-white">&gt;</span>
-              <span className="text-orange-500">Shop</span>
+              <span className="text-orange-500">Cart</span>
             </div>
           </div>
         </div>
@@ -253,13 +168,11 @@ const [loading, setLoading]= useState(false)
 
             {/* Checkout Button */}
             <div className="mt-6  text-center sm:text-right">
-              
-                <button 
-                onClick={handleCheckout}
-                className="px-4 py-3 w-full sm:w-1/2 bg-[#ff9f0d] text-white font-semibold rounded hover:bg-yellow-600 transition">
+              <Link href="/checkout">
+                <button className="px-4 py-3 w-full sm:w-1/2 bg-[#ff9f0d] text-white font-semibold rounded hover:bg-yellow-600 transition">
                   Proceed to Checkout
                 </button>
-              
+              </Link>
             </div>
           </div>
         )}

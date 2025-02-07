@@ -1,6 +1,6 @@
 
 import React from 'react'
-
+import Link from 'next/link';
 import Image from 'next/image'
 const FoodCategory = () => {
        // Items array containing food details
@@ -27,14 +27,14 @@ const FoodCategory = () => {
           {items.map((item) => (
             <div key={item.id} className="relative">
               {/* Image of the food item */}
-              <Image
+             <Link href='/shop'> <Image
                 src={item.Image}
                 alt={item.label}
                 width={500}
                 height={500}
                 className="w-full h-56 object-cover rounded-lg hover:scale-105 transition-transform duration-300"
               />
-
+                 </Link>
               {/* Overlay label */}
               <div className="absolute bottom-4 left-4 bg-white opacity-90 px-4 py-2 rounded-md">
                 <span className="text-orange-500 font-semibold">{item.label}</span>

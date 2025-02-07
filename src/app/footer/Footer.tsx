@@ -51,7 +51,7 @@ export default function Footer() {
               <div>
                 <h4 className="text-[18px]">Opening Hours</h4>
                 <p className="text-white text-[12px]">
-                  Mon - Sat (8:00 - 6:00)
+                  Mon - Sat (6:00pm - 8:00am)
                 </p>
                 <p className="text-white text-[12px]">Sunday - Closed</p>
               </div>
