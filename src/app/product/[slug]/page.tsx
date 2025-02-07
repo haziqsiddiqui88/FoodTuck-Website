@@ -9,57 +9,64 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
-
 export const revalidate = 60; // seconds
+
 export async function generateStaticParams() {
   const query = `*[_type=='food']{
     "slug":slug.current
   }`;
   const slugs = await client.fetch(query);
 
-
   return slugs.map((item: any) => ({
-    params: { slug: item.slug },
+    slug: item.slug,
   }));
 }
+
 const Page = async ({ params }: { params: { slug: string } }) => {
-  
-  const { slug } = await Promise.resolve(params); 
+  console.log("Params received:", params); // Debugging
+
+  if (!params || !params.slug) {
+    return <div>Error: Invalid slug</div>;
+  }
+
+  const { slug } = params;
 
   const query = `*[_type=='food' && slug.current=='${slug}'] {
-    foodName, price, tags, image, description, available, category, originalPrice, summary
+    foodName, price, tags, image, description, available, category, originalPrice, summary, _id
   }[0]`;
 
   const food = await client.fetch(query);
 
+  if (!food) {
+    return <div>Error: Food not found</div>;
+  }
+
   return (
     <div className="min-h-screen">
       <header className="top-0 left-0 right-0 z-50">
-        <header className="top-0 left-0 right-0 z-50">
-          <nav className="bg-black px-4 md:px-6">
-            <Navbar />
-          </nav>
+        <nav className="bg-black px-4 md:px-6">
+          <Navbar />
+        </nav>
 
-          {/* Hero Section */}
-          <div
-            className="relative h-[300px] w-full bg-cover bg-center"
-            style={{ backgroundImage: `url('/home-pic-1.png')` }}
-          >
-            <div className="absolute inset-0 bg-black/50" />
-            <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 text-center">
-              <h1 className="mb-4 text-5xl font-bold text-white">Product Detail</h1>
-              <div className="flex items-center gap-2 text-lg">
-                <Link href="/" className="text-white hover:text-orange-500">
-                  Home
-                </Link>
-                <span className="text-white">&gt;</span>
-                <span className="text-orange-500">Detail</span>
-              </div>
+        {/* Hero Section */}
+        <div
+          className="relative h-[300px] w-full bg-cover bg-center"
+          style={{ backgroundImage: `url('/home-pic-1.png')` }}
+        >
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 text-center">
+            <h1 className="mb-4 text-5xl font-bold text-white">Product Detail</h1>
+            <div className="flex items-center gap-2 text-lg">
+              <Link href="/" className="text-white hover:text-orange-500">
+                Home
+              </Link>
+              <span className="text-white">&gt;</span>
+              <span className="text-orange-500">Detail</span>
             </div>
           </div>
-        </header>
-        {/* navbar end */}
+        </div>
       </header>
+
       {/* Main Content */}
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -73,7 +80,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 height={96}
                 className="object-cover rounded-lg cursor-pointer"
               />
-               <Image
+              <Image
                 src="/shop3.png"
                 alt="Thumbnail 1"
                 width={96}
@@ -138,36 +145,32 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                   </p>
                 )}
               </div>
-              
-      
             </div>
-                     {/* Rating and Reviews */}
-      <div className="flex items-center space-x-2 mt-3 text-gray-600 text-md">
-        <div >
-          <Rating />
-        </div>
-        <span>| 5.0 Rating | 22 Review</span>
-      </div>
-             {/* Category */}
-      <div className="mt-3"><p className="text-gray-500 ">Dictum/cursus/Risus</p></div>
-     <div className=" mt-2 flex items-center gap-[20px] border-b pb-4">
-          <QuantitySelector />
-          <AddToCartButton
+                     
+            {/* Rating and Reviews */}
+            <div className="flex items-center space-x-2 mt-3 text-gray-600 text-md">
+              <div >
+                <Rating />
+              </div>
+              <span>| 5.0 Rating | 22 Review</span>
+            </div>
+            
+            {/* Category */}
+            <div className="mt-3"><p className="text-gray-500 ">Dictum/cursus/Risus</p></div>
+            
+            <div className=" mt-2 flex items-center gap-[20px] border-b pb-4">
+              <QuantitySelector />
+              <AddToCartButton
                 food={{
                   id: food._id,
                   name: food.foodName,
                   price: food.price,
                   image: food.imageUrl || "/default-image.jpeg",
-                
                 }}
               />
-              </div>
-           
-             
-            
             </div>
           </div>
-        
+        </div>
 
         {/* Tabs and Similar Products */}
         <div className="mt-12">
@@ -254,12 +257,12 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 </Link>
               ))}
             </div>
-            </div>
           </div>
         </div>
       </div>
-   
+    </div>
   );
 };
 
+export const dynamicParams = false; 
 export default Page;

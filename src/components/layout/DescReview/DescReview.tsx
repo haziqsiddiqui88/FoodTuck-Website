@@ -34,7 +34,7 @@ const DescReview   = ({ food }: { food: Food }) => {
 
       <div className="p-3 font-sans  ">
         {activeTab === "description" && <p>{food.summary}</p>}
-        {activeTab === "reviews" && <p>Reviews content goes here.</p>}
+        {activeTab === "reviews" && <p>No Reviews.</p>}
       </div>
       
     </div>
