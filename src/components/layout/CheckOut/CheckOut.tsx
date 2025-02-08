@@ -16,13 +16,22 @@ import { useUser } from "@/app/context/UserContext";
 import { createCheckoutSession, Metadata } from "../../../../action/createCheckoutSession";
 
 import Navbar from "@/app/navbar/Navbar";
+
 // Define Food Type
+interface ImageAsset {
+  _type: string;
+  asset: {
+    _ref: string;
+    _type: string;
+  };
+}
+
 interface Food {
   _id: string;
   name: string;
   price: number;
   quantity: number;
-  image?: any;
+  image?: ImageAsset;
 }
 
 // Define Form Values Type
