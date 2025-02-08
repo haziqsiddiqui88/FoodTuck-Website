@@ -8,6 +8,14 @@ import Link from "next/link";
 
 import Navbar from "@/app/navbar/Navbar";
 
+type CartItem = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
 const CartPage = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
   const [coupon, setCoupon] = useState(""); // Store entered coupon code
@@ -41,8 +49,6 @@ const CartPage = () => {
     }
   };
 
-  
-
   return (
     <div className="min-h-screen">
       {/* Navbar & Hero Section */}
@@ -75,7 +81,7 @@ const CartPage = () => {
         ) : (
           <div className="space-y-4 max-w-6xl mx-auto">
             <h1 className="text-2xl sm:text-3xl font-bold mb-6">Cart</h1>
-            {cart.map((item) => (
+            {cart.map((item: CartItem) => (
               <div
                 key={item.id}
                 className="flex flex-col sm:flex-row items-center justify-between border p-4 rounded-lg shadow"

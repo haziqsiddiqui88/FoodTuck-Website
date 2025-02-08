@@ -40,7 +40,7 @@ export default function CheckOut() {
   const [cartItems, setCartItems] = useState<Food[]>([]);
   const [discount, setDiscount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-const { user } = useUser();
+  const { user } = useUser();
   const [formValues, setFormValues] = useState<FormValues>({
     firstName: "",
     lastName: "",
@@ -175,10 +175,6 @@ const { user } = useUser();
         </div>
       </header>
 
-
-
-
-
       {/* Breadcrumb */}
       <div className="mt-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -202,7 +198,7 @@ const { user } = useUser();
                 <div className="w-16 h-16 overflow-hidden rounded">
                   {item.image && (
                     <Image
-                      src={urlFor(item.image).url()}
+                      src={item.image.asset ? urlFor(item.image).url() : "/default-image.jpeg"}
                       alt={item.name}
                       width={64}
                       height={64}

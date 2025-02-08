@@ -9,7 +9,7 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
-
+type Slug = { slug: string; };
 export const revalidate = 60; // seconds
 export async function generateStaticParams() {
   const query = `*[_type=='food']{
@@ -18,20 +18,13 @@ export async function generateStaticParams() {
   const slugs = await client.fetch(query);
 
 
-  return slugs.map((item: any) => ({
-    params: { slug: item.slug },
-  }));
-}
-const Page = async ({ params }: { params: { slug: string } }) => {
+  return slugs.map((item: Slug) => ({ params: { slug: item.slug }, })); }
+
+  const Page = async ({ params }: { params: { slug: string } }) => { const { slug } = await Promise.resolve(params);
   
-  const { slug } = await Promise.resolve(params); 
-
-  const query = `*[_type=='food' && slug.current=='${slug}'] {
-    foodName, price, tags, image, description, available, category, originalPrice, summary
-  }[0]`;
-
+  const query = `*[_type=='food' && slug.current=='${slug}'] { foodName, price, tags, image, description, available, category, originalPrice, summary }[0]`;
+  
   const food = await client.fetch(query);
-
   return (
     <div className="min-h-screen">
       <header className="top-0 left-0 right-0 z-50">
