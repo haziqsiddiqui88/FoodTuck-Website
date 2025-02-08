@@ -9,94 +9,72 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
-export const revalidate = 60; // seconds
+export const revalidate = 60; // ISR (Incremental Static Regeneration)
+
+// ✅ Fetch dynamic params for static generation
 export async function generateStaticParams() {
-  const query = `*[_type=='food']{
-    "slug":slug.current
-  }`;
+  const query = `*[_type=='food']{ "slug": slug.current }`;
   const slugs = await client.fetch(query);
-
-  return slugs.map((item: any) => ({
-    params: { slug: item.slug },
-  }));
+  return slugs.map((item: { slug: string }) => ({ slug: item.slug }));
 }
+
+// ✅ Product detail page
 const Page = async ({ params }: { params: { slug: string } }) => {
-  const { slug } = await Promise.resolve(params);
+  const { slug } = params; // ✅ Fixed params destructuring
 
-  const query = `*[_type=='food' && slug.current=='${slug}'] {
-    foodName, price, tags, image, description, available, category, originalPrice, summary
-  }[0]`;
+  // ✅ Fetch product details
+  const query = `*[_type=='food' && slug.current == $slug][0] {
+    _id, foodName, price, tags, image, description, available, category, originalPrice, summary
+  }`;
+  const food = await client.fetch(query, { slug });
 
-  const food = await client.fetch(query);
+  // ✅ Fetch similar products
+  const similarProductsQuery = `*[_type=='food' && slug.current != $slug][0...4] {
+    foodName, price, image, "slug": slug.current
+  }`;
+  const similarProducts = await client.fetch(similarProductsQuery, { slug });
 
   return (
     <div className="min-h-screen">
       <header className="top-0 left-0 right-0 z-50">
-        <header className="top-0 left-0 right-0 z-50">
-          <nav className="bg-black px-4 md:px-6">
-            <Navbar />
-          </nav>
-
-          {/* Hero Section */}
-          <div
-            className="relative h-[300px] w-full bg-cover bg-center"
-            style={{ backgroundImage: `url('/home-pic-1.png')` }}
-          >
-            <div className="absolute inset-0 bg-black/50" />
-            <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 text-center">
-              <h1 className="mb-4 text-5xl font-bold text-white">
-                Product Detail
-              </h1>
-              <div className="flex items-center gap-2 text-lg">
-                <Link href="/" className="text-white hover:text-orange-500">
-                  Home
-                </Link>
-                <span className="text-white">&gt;</span>
-                <span className="text-orange-500">Detail</span>
-              </div>
+        <nav className="bg-black px-4 md:px-6">
+          <Navbar />
+        </nav>
+        {/* Hero Section */}
+        <div
+          className="relative h-[300px] w-full bg-cover bg-center"
+          style={{ backgroundImage: `url('/home-pic-1.png')` }}
+        >
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 text-center">
+            <h1 className="mb-4 text-5xl font-bold text-white">Product Detail</h1>
+            <div className="flex items-center gap-2 text-lg">
+              <Link href="/" className="text-white hover:text-orange-500">Home</Link>
+              <span className="text-white">&gt;</span>
+              <span className="text-orange-500">Detail</span>
             </div>
           </div>
-        </header>
-        {/* navbar end */}
+        </div>
       </header>
+
       {/* Main Content */}
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Images */}
           <div className="flex gap-8">
-            {/* Thumbnails */}
             <div className="flex flex-col gap-4">
-              <Image
-                src="/shop6.png"
-                alt="Thumbnail 1"
-                width={96}
-                height={96}
-                className="object-cover rounded-lg cursor-pointer"
-              />
-              <Image
-                src="/shop3.png"
-                alt="Thumbnail 1"
-                width={96}
-                height={96}
-                className="object-cover rounded-lg cursor-pointer"
-              />
-              <Image
-                src="/shop5.png"
-                alt="Thumbnail 2"
-                width={96}
-                height={96}
-                className="object-cover rounded-lg cursor-pointer"
-              />
-              <Image
-                src="/shop4.png"
-                alt="Thumbnail 3"
-                width={96}
-                height={96}
-                className="object-cover rounded-lg cursor-pointer"
-              />
+              {[1, 2, 3, 4].map((num) => (
+                <Image
+                  key={num}
+                  src={`/shop${num}.png`}
+                  alt={`Thumbnail ${num}`}
+                  width={96}
+                  height={96}
+                  className="object-cover rounded-lg cursor-pointer"
+                />
+              ))}
             </div>
-
-            {/* Main Product Image */}
-            <div className="">
+            <div>
               {food.image && (
                 <Image
                   src={urlFor(food.image).url()}
@@ -110,155 +88,66 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           </div>
 
           {/* Product Details */}
-          <div className="lg:mt-16 ">
-            <h2 className="text-3xl font-bold font-playwrite">
-              {food.foodName}
-            </h2>
-            <p className="text-gray-600 font-sans mt-2 border-b pb-4">
-              {food.description}
-            </p>
-
+          <div className="lg:mt-16">
+            <h2 className="text-3xl font-bold font-playwrite">{food.foodName}</h2>
+            <p className="text-gray-600 font-sans mt-2 border-b pb-4">{food.description}</p>
             <div className="flex mt-4 space-x-3">
-              {/* Original price */}
-              <p className="text-xl text-red-600 font-bold line-through">
-                ${food.originalPrice}
-              </p>
-
-              <div className="flex gap-2 food-center">
-                {/* Discounted price */}
-                <p className="font-bold text-xl text-black">${food.price}</p>
-
-                {/* Display discount percentage only if there is a discount */}
-                {food.originalPrice > food.price && (
-                  <p className="text-sm text-green-600 font-medium">
-                    {Math.round(
-                      ((food.originalPrice - food.price) / food.originalPrice) *
-                        100
-                    )}
-                    % OFF
-                  </p>
-                )}
-              </div>
+              {food.originalPrice > food.price && (
+                <p className="text-xl text-red-600 font-bold line-through">${food.originalPrice}</p>
+              )}
+              <p className="font-bold text-xl text-black">${food.price}</p>
+              {food.originalPrice > food.price && (
+                <p className="text-sm text-green-600 font-medium">
+                  {Math.round(((food.originalPrice - food.price) / food.originalPrice) * 100)}% OFF
+                </p>
+              )}
             </div>
-            {/* Rating and Reviews */}
             <div className="flex items-center space-x-2 mt-3 text-gray-600 text-md">
-              <div>
-                <Rating />
-              </div>
-              <span>| 5.0 Rating | 22 Review</span>
+              <Rating />
+              <span>| 5.0 Rating | 22 Reviews</span>
             </div>
-            {/* Category */}
             <div className="mt-3">
-              <p className="text-gray-500 ">Dictum/cursus/Risus</p>
+              <p className="text-gray-500">{food.category}</p>
             </div>
-            <div className=" mt-2 flex items-center gap-[20px] border-b pb-4">
+            <div className="mt-2 flex items-center gap-[20px] border-b pb-4">
               <QuantitySelector />
               <AddToCartButton
                 food={{
                   id: food._id,
                   name: food.foodName,
                   price: food.price,
-                  image: food.imageUrl || "/default-image.jpeg",
+                  image: food.image || "/default-image.jpeg",
                 }}
               />
             </div>
           </div>
         </div>
 
-        {/* Tabs and Similar Products */}
+        {/* Description and Reviews */}
+        <div className="mt-12 border-b pb-4">
+          <DescReview food={food} />
+        </div>
+
+        {/* Similar Products */}
         <div className="mt-12">
-          {/* Product Description */}
-          <div className="border-b pb-4">
-            <DescReview food={food} />
-          </div>
-
-          {/* Key Benefits */}
-          <div className="border-b pb-4 mt-3">
-            <h3 className="text-xl font-extralight">Key Benefits</h3>
-            <div className="p-6 font-sans">
-              <ul className="list-none space-y-2">
-                <li className="relative pl-6">
-                  <span className="absolute left-0 text-[#ff9f0d] text-lg">
-                    •
-                  </span>
-                  <strong>Lorem ipsum dolor sit amet</strong>, consectetur
-                  adipiscing elit.
-                </li>
-                <li className="relative pl-6">
-                  <span className="absolute left-0 text-[#ff9f0d] text-lg">
-                    •
-                  </span>
-                  <strong>Maecenas ullamcorper est</strong> et massa mattis
-                  condimentum.
-                </li>
-                <li className="relative pl-6">
-                  <span className="absolute left-0 text-[#ff9f0d] text-lg">
-                    •
-                  </span>
-                  <strong>Vestibulum sed massa vel</strong> ipsum imperdiet
-                  malesuada id tempus nisl.
-                </li>
-                <li className="relative pl-6">
-                  <span className="absolute left-0 text-[#ff9f0d] text-lg">
-                    •
-                  </span>
-                  <strong>Etiam nec massa et lectus</strong> faucibus ornare
-                  congue in nunc.
-                </li>
-                <li className="relative pl-6">
-                  <span className="absolute left-0 text-[#ff9f0d] text-lg">
-                    •
-                  </span>
-                  <strong>Mauris eget diam magna</strong>, in blandit turpis.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Similar Products */}
-          <div className="mt-12">
-            <h3 className="text-2xl font-serif font-bold mb-6">
-              <i>Similar Products</i>
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {(
-                await client.fetch(
-                  `*[_type=='food' && slug.current != '${slug}'][0...4] {
-          foodName, price, image, "slug": slug.current
-        }`
-                )
-              ).map(
-                (
-                  product: {
-                    foodName: string;
-                    price: number;
-                    image: string;
-                    slug: string;
-                  },
-                  index: number
-                ) => (
-                  <Link
-                    href={`${product.slug}`}
-                    key={`${product.slug}-${index}`}
-                  >
-                    <div className="border p-4 rounded-lg hover:shadow-md transition">
-                      {product.image && (
-                        <Image
-                          src={urlFor(product.image).url()}
-                          width={300}
-                          height={200}
-                          alt={product.foodName}
-                          className="w-full h-48 object-cover rounded"
-                        />
-                      )}
-                      <h4 className="mt-2 text-lg font-semibold">
-                        {product.foodName}
-                      </h4>
-                    </div>
-                  </Link>
-                )
-              )}
-            </div>
+          <h3 className="text-2xl font-serif font-bold mb-6"><i>Similar Products</i></h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {similarProducts.map((product: { foodName: string; price: number; image: string; slug: string }) => (
+              <Link href={`/product/${product.slug}`} key={product.slug}>
+                <div className="border p-4 rounded-lg hover:shadow-md transition">
+                  {product.image && (
+                    <Image
+                      src={urlFor(product.image).url()}
+                      width={300}
+                      height={200}
+                      alt={product.foodName}
+                      className="w-full h-48 object-cover rounded"
+                    />
+                  )}
+                  <h4 className="mt-2 text-lg font-semibold">{product.foodName}</h4>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

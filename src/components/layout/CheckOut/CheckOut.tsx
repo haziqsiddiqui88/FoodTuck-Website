@@ -120,11 +120,15 @@ const { user } = useUser();
         quantity: item.quantity,
       }));
   
+      if (!user) {
+        toast.error("User not found. Please log in.");
+        return;
+      }
       const metadata: Metadata = {
         orderNumber: crypto.randomUUID(),
-        customerName: user?.fullName ?? "Unknown",
-        customerEmail: user?.emailAddress[0]?.emailAddress ?? "Unknown",
-        ClerkUserId: user!.id,
+        customerName: user.fullName ?? "Unknown",
+        customerEmail: user?.emailAddress?.[0]?.emailAddress || "Unknown",
+        ClerkUserId: user.id,
       };
 
       const checkoutUrl = await createCheckoutSession(
@@ -193,7 +197,7 @@ const { user } = useUser();
                 <Input
                   id={field}
                   placeholder={`Enter your ${field}`}
-                  value={formValues[field as keyof FormValues]}
+                  value={formValues[field as keyof FormValues] as string}
                   onChange={(e) => setFormValues({ ...formValues, [field]: e.target.value })}
                 />
                 {formErrors[field] && <p className="text-red-500 text-sm">{field} is required</p>}
