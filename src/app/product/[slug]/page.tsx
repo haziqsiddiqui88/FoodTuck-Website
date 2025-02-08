@@ -9,22 +9,29 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
-type Slug = { slug: string; };
+type Slug = { slug: string };
 export const revalidate = 60; // seconds
+
 export async function generateStaticParams() {
   const query = `*[_type=='food']{
     "slug":slug.current
   }`;
-  const slugs = await client.fetch(query);
+  const slugs: Slug[] = await client.fetch(query);
 
+  return slugs.map((item: Slug) => ({ params: { slug: item.slug } }));
+}
 
-  return slugs.map((item: Slug) => ({ params: { slug: item.slug }, })); }
+interface PageProps {
+  params: { slug: string };
+}
 
-  const Page = async ({ params }: { params: { slug: string } }) => { const { slug } = await Promise.resolve(params);
-  
+const Page = async ({ params }: PageProps) => {
+  const { slug } = await Promise.resolve(params);
+
   const query = `*[_type=='food' && slug.current=='${slug}'] { foodName, price, tags, image, description, available, category, originalPrice, summary }[0]`;
-  
+
   const food = await client.fetch(query);
+
   return (
     <div className="min-h-screen">
       <header className="top-0 left-0 right-0 z-50">
@@ -66,7 +73,7 @@ export async function generateStaticParams() {
                 height={96}
                 className="object-cover rounded-lg cursor-pointer"
               />
-               <Image
+              <Image
                 src="/shop3.png"
                 alt="Thumbnail 1"
                 width={96}
@@ -109,13 +116,13 @@ export async function generateStaticParams() {
               {food.foodName}
             </h2>
             <p className="text-gray-600 font-sans mt-2 border-b pb-4">{food.description}</p>
-            
+
             <div className="flex mt-4 space-x-3">
               {/* Original price */}
               <p className="text-xl text-red-600 font-bold line-through">
                 ${food.originalPrice}
               </p>
-              
+
               <div className="flex gap-2 food-center">
                 {/* Discounted price */}
                 <p className="font-bold text-xl text-black">${food.price}</p>
@@ -125,42 +132,35 @@ export async function generateStaticParams() {
                   <p className="text-sm text-green-600 font-medium">
                     {Math.round(
                       ((food.originalPrice - food.price) / food.originalPrice) *
-                        100
+                      100
                     )}
                     % OFF
                   </p>
                 )}
               </div>
-              
-      
             </div>
-                     {/* Rating and Reviews */}
-      <div className="flex items-center space-x-2 mt-3 text-gray-600 text-md">
-        <div >
-          <Rating />
-        </div>
-        <span>| 5.0 Rating | 22 Review</span>
-      </div>
-             {/* Category */}
-      <div className="mt-3"><p className="text-gray-500 ">Dictum/cursus/Risus</p></div>
-     <div className=" mt-2 flex items-center gap-[20px] border-b pb-4">
-          <QuantitySelector />
-          <AddToCartButton
+            {/* Rating and Reviews */}
+            <div className="flex items-center space-x-2 mt-3 text-gray-600 text-md">
+              <div>
+                <Rating />
+              </div>
+              <span>| 5.0 Rating | 22 Review</span>
+            </div>
+            {/* Category */}
+            <div className="mt-3"><p className="text-gray-500 ">Dictum/cursus/Risus</p></div>
+            <div className=" mt-2 flex items-center gap-[20px] border-b pb-4">
+              <QuantitySelector />
+              <AddToCartButton
                 food={{
                   id: food._id,
                   name: food.foodName,
                   price: food.price,
                   image: food.imageUrl || "/default-image.jpeg",
-                
                 }}
               />
-              </div>
-           
-             
-            
             </div>
           </div>
-        
+        </div>
 
         {/* Tabs and Similar Products */}
         <div className="mt-12">
@@ -224,7 +224,7 @@ export async function generateStaticParams() {
           foodName, price, image, "slug": slug.current
         }
       `)
-              ).map((product:  { foodName: string; price: number; image: string; slug: string }, index: number) => (
+              ).map((product: { foodName: string; price: number; image: string; slug: string }, index: number) => (
                 <Link
                   href={`${product.slug}`}
                   key={`${product.slug}-${index}`}
@@ -233,8 +233,8 @@ export async function generateStaticParams() {
                     {product.image && (
                       <Image
                         src={urlFor(product.image).url()}
-                        width={300} 
-                        height={200} 
+                        width={300}
+                        height={200}
                         alt={product.foodName}
                         className="w-full h-48 object-cover rounded"
                       />
@@ -242,16 +242,14 @@ export async function generateStaticParams() {
                     <h4 className="mt-2 text-lg font-semibold">
                       {product.foodName}
                     </h4>
-                   
                   </div>
                 </Link>
               ))}
             </div>
-            </div>
           </div>
         </div>
       </div>
-   
+    </div>
   );
 };
 
