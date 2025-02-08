@@ -8,16 +8,9 @@ import Link from "next/link";
 
 import Navbar from "@/app/navbar/Navbar";
 
-type CartItem = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
-};
-
 const CartPage = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
+
   const [coupon, setCoupon] = useState(""); // Store entered coupon code
   const [discount, setDiscount] = useState(0); // Store discount amount
 
@@ -79,13 +72,15 @@ const CartPage = () => {
         {cart.length === 0 ? (
           <p className="text-2xl font-thin">Your cart is empty.</p>
         ) : (
+          
           <div className="space-y-4 max-w-6xl mx-auto">
+
             <h1 className="text-2xl sm:text-3xl font-bold mb-6">Cart</h1>
-            {cart.map((item: CartItem) => (
-              <div
-                key={item.id}
-                className="flex flex-col sm:flex-row items-center justify-between border p-4 rounded-lg shadow"
-              >
+            {cart.map((item, index) => (
+  <div
+    key={item.id || `cart-item-${index}`}
+    className="flex flex-col sm:flex-row items-center justify-between border p-4 rounded-lg shadow"
+  >
                 <div className="flex items-center space-x-4 mb-4 sm:mb-0">
                   {item.image && (
                     <Image

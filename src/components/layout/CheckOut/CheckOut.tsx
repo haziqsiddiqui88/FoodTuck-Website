@@ -14,24 +14,13 @@ import { getCartItems } from "@/lib/actions";
 
 import { useUser } from "@/app/context/UserContext";
 import { createCheckoutSession, Metadata } from "../../../../action/createCheckoutSession";
-
-import Navbar from "@/app/navbar/Navbar";
-
 // Define Food Type
-interface ImageAsset {
-  _type: string;
-  asset: {
-    _ref: string;
-    _type: string;
-  };
-}
-
 interface Food {
   _id: string;
   name: string;
   price: number;
   quantity: number;
-  image?: ImageAsset;
+  image?: any;
 }
 
 // Define Form Values Type
@@ -45,11 +34,11 @@ interface FormValues {
   email: string;
 }
 
-export default function CheckOut() {
+export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState<Food[]>([]);
   const [discount, setDiscount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const { user } = useUser();
+const { user } = useUser();
   const [formValues, setFormValues] = useState<FormValues>({
     firstName: "",
     lastName: "",
@@ -106,21 +95,15 @@ export default function CheckOut() {
         _type: "order",
         ...formValues,
         cartItems: cartItems.map((item) => ({
-          _type: "cartItem",
-          _key: item._id || crypto.randomUUID(),
-          foodItem: {
-            _type: "reference",
-            _ref: item._id,
-          },
-          quantity: item.quantity, // Ensure quantity is included
-          price: item.price, // Store price for record keeping
+          _type: "reference",
+          _ref: item._id,
         })),
-        
         total,
         discount,
         orderDate: new Date().toISOString(),
-        status: "Pending Payment",
+        status: "Pending Payment", // New field to track payment status
       };
+  
       const orderResponse = await client.create(orderData);
       if (!orderResponse) {
         throw new Error("Failed to create order in Sanity");
@@ -160,30 +143,6 @@ export default function CheckOut() {
 
   return (
     <div className="min-h-screen bg-white">
-
- {/* Navbar & Hero Section */}
- <header className="top-0 left-0 right-0 z-50">
-        <nav className="bg-black px-4 md:px-6">
-          <Navbar />
-        </nav>
-        <div
-          className="relative h-[300px] w-full bg-cover bg-center"
-          style={{ backgroundImage: `url('/home-pic-1.png')` }}
-        >
-          <div className="absolute inset-0 bg-black/50" />
-          <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 text-center">
-            <h1 className="mb-4 text-5xl font-bold text-white">Our Shop</h1>
-            <div className="flex items-center gap-2 text-lg">
-              <Link href="/" className="text-white hover:text-orange-500">
-                Home
-              </Link>
-              <span className="text-white">&gt;</span>
-              <span className="text-orange-500">Checkout</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Breadcrumb */}
       <div className="mt-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -207,7 +166,7 @@ export default function CheckOut() {
                 <div className="w-16 h-16 overflow-hidden rounded">
                   {item.image && (
                     <Image
-                      src={item.image.asset ? urlFor(item.image).url() : "/default-image.jpeg"}
+                      src={urlFor(item.image).url()}
                       alt={item.name}
                       width={64}
                       height={64}

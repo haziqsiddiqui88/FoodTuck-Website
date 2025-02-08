@@ -9,26 +9,23 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
-type Slug = { slug: string };
 export const revalidate = 60; // seconds
-
 export async function generateStaticParams() {
   const query = `*[_type=='food']{
     "slug":slug.current
   }`;
-  const slugs: Slug[] = await client.fetch(query);
+  const slugs = await client.fetch(query);
 
-  return slugs.map((item: Slug) => ({ params: { slug: item.slug } }));
+  return slugs.map((item: any) => ({
+    params: { slug: item.slug },
+  }));
 }
+const Page = async ({ params }: { params: { slug: string } }) => {
+  const { slug } = await Promise.resolve(params);
 
-interface PageProps {
-  params: { slug: string };
-}
-
-const Page = async ({ params }: PageProps) => {
-  const { slug } = params;
-
-  const query = `*[_type=='food' && slug.current=='${slug}'] { foodName, price, tags, image, description, available, category, originalPrice, summary }[0]`;
+  const query = `*[_type=='food' && slug.current=='${slug}'] {
+    foodName, price, tags, image, description, available, category, originalPrice, summary
+  }[0]`;
 
   const food = await client.fetch(query);
 
@@ -47,7 +44,9 @@ const Page = async ({ params }: PageProps) => {
           >
             <div className="absolute inset-0 bg-black/50" />
             <div className="relative mx-auto flex h-full max-w-7xl flex-col items-center justify-center px-4 text-center">
-              <h1 className="mb-4 text-5xl font-bold text-white">Product Detail</h1>
+              <h1 className="mb-4 text-5xl font-bold text-white">
+                Product Detail
+              </h1>
               <div className="flex items-center gap-2 text-lg">
                 <Link href="/" className="text-white hover:text-orange-500">
                   Home
@@ -115,7 +114,9 @@ const Page = async ({ params }: PageProps) => {
             <h2 className="text-3xl font-bold font-playwrite">
               {food.foodName}
             </h2>
-            <p className="text-gray-600 font-sans mt-2 border-b pb-4">{food.description}</p>
+            <p className="text-gray-600 font-sans mt-2 border-b pb-4">
+              {food.description}
+            </p>
 
             <div className="flex mt-4 space-x-3">
               {/* Original price */}
@@ -132,7 +133,7 @@ const Page = async ({ params }: PageProps) => {
                   <p className="text-sm text-green-600 font-medium">
                     {Math.round(
                       ((food.originalPrice - food.price) / food.originalPrice) *
-                      100
+                        100
                     )}
                     % OFF
                   </p>
@@ -147,7 +148,9 @@ const Page = async ({ params }: PageProps) => {
               <span>| 5.0 Rating | 22 Review</span>
             </div>
             {/* Category */}
-            <div className="mt-3"><p className="text-gray-500 ">Dictum/cursus/Risus</p></div>
+            <div className="mt-3">
+              <p className="text-gray-500 ">Dictum/cursus/Risus</p>
+            </div>
             <div className=" mt-2 flex items-center gap-[20px] border-b pb-4">
               <QuantitySelector />
               <AddToCartButton
@@ -219,32 +222,42 @@ const Page = async ({ params }: PageProps) => {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {(
-                await client.fetch(`
-        *[_type=='food' && slug.current != '${slug}'][0...4] {
+                await client.fetch(
+                  `*[_type=='food' && slug.current != '${slug}'][0...4] {
           foodName, price, image, "slug": slug.current
-        }
-      `)
-              ).map((product: { foodName: string; price: number; image: string; slug: string }, index: number) => (
-                <Link
-                  href={`${product.slug}`}
-                  key={`${product.slug}-${index}`}
-                >
-                  <div className="border p-4 rounded-lg hover:shadow-md transition">
-                    {product.image && (
-                      <Image
-                        src={urlFor(product.image).url()}
-                        width={300}
-                        height={200}
-                        alt={product.foodName}
-                        className="w-full h-48 object-cover rounded"
-                      />
-                    )}
-                    <h4 className="mt-2 text-lg font-semibold">
-                      {product.foodName}
-                    </h4>
-                  </div>
-                </Link>
-              ))}
+        }`
+                )
+              ).map(
+                (
+                  product: {
+                    foodName: string;
+                    price: number;
+                    image: string;
+                    slug: string;
+                  },
+                  index: number
+                ) => (
+                  <Link
+                    href={`${product.slug}`}
+                    key={`${product.slug}-${index}`}
+                  >
+                    <div className="border p-4 rounded-lg hover:shadow-md transition">
+                      {product.image && (
+                        <Image
+                          src={urlFor(product.image).url()}
+                          width={300}
+                          height={200}
+                          alt={product.foodName}
+                          className="w-full h-48 object-cover rounded"
+                        />
+                      )}
+                      <h4 className="mt-2 text-lg font-semibold">
+                        {product.foodName}
+                      </h4>
+                    </div>
+                  </Link>
+                )
+              )}
             </div>
           </div>
         </div>
