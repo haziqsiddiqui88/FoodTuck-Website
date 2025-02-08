@@ -9,24 +9,31 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
-export const revalidate = 60; // ISR (Incremental Static Regeneration)
+export const revalidate = 60; // ISR
 
-// ✅ Fetch dynamic params for static generation
 export async function generateStaticParams() {
   const query = `*[_type=='food']{ "slug": slug.current }`;
   const slugs = await client.fetch(query);
   return slugs.map((item: { slug: string }) => ({ slug: item.slug }));
 }
 
-// ✅ Product detail page
-const Page = async ({ params }: { params: { slug: string } }) => {
-  const { slug } = params; // ✅ Fixed params destructuring
+const Page = async ({ params }: { params?: { slug?: string } }) => {
+  // ✅ Ensure params is properly handled
+  if (!params || !params.slug) {
+    return <div className="text-center text-red-500">Error: Invalid product slug</div>;
+  }
 
-  // ✅ Fetch product details
+  const { slug } = params; // ✅ Destructure safely
+
+  // ✅ Fetch product details safely
   const query = `*[_type=='food' && slug.current == $slug][0] {
     _id, foodName, price, tags, image, description, available, category, originalPrice, summary
   }`;
   const food = await client.fetch(query, { slug });
+
+  if (!food) {
+    return <div className="text-center text-red-500">Product not found</div>;
+  }
 
   // ✅ Fetch similar products
   const similarProductsQuery = `*[_type=='food' && slug.current != $slug][0...4] {
@@ -40,7 +47,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
         <nav className="bg-black px-4 md:px-6">
           <Navbar />
         </nav>
-        {/* Hero Section */}
         <div
           className="relative h-[300px] w-full bg-cover bg-center"
           style={{ backgroundImage: `url('/home-pic-1.png')` }}
@@ -60,7 +66,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
       {/* Main Content */}
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Images */}
           <div className="flex gap-8">
             <div className="flex flex-col gap-4">
               {[1, 2, 3, 4].map((num) => (
