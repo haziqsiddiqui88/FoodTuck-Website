@@ -26,7 +26,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  const { slug } = await Promise.resolve(params);
+  const { slug } = params;
 
   const query = `*[_type=='food' && slug.current=='${slug}'] { foodName, price, tags, image, description, available, category, originalPrice, summary }[0]`;
 
