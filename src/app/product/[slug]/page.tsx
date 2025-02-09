@@ -1,6 +1,9 @@
+"use client"; // Ensure this is a Client Component
+
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import DescReview from "@/components/layout/DescReview/DescReview";
@@ -9,37 +12,71 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
-export const revalidate = 60; // ISR
+// ✅ Define Food type
+type Food = {
+  _id: string;
+  foodName: string;
+  price: number;
+  tags: string[];
+  image: any;
+  description: string;
+  available: boolean;
+  category: string;
+  originalPrice: number;
+  summary: string;
+};
 
-export async function generateStaticParams() {
-  const query = `*[_type=='food']{ "slug": slug.current }`;
-  const slugs = await client.fetch(query);
-  return slugs.map((item: { slug: string }) => ({ slug: item.slug }));
-}
+// ✅ Define SimilarProduct type
+type SimilarProduct = {
+  foodName: string;
+  price: number;
+  image: any;
+  slug: string;
+};
 
-const Page = async ({ params }: { params?: { slug?: string } }) => {
-  //  Ensure params is properly handled
-  if (!params || !params.slug) {
+const Page = () => {
+  const params = useParams();
+  const slug = params?.slug as string; // ✅ Ensure slug is a string
+
+  // ✅ Use explicit type for food state
+  const [food, setFood] = useState<Food | null>(null);
+  const [similarProducts, setSimilarProducts] = useState<SimilarProduct[]>([]);
+
+  useEffect(() => {
+    if (!slug) return;
+
+    const fetchData = async () => {
+      try {
+        const foodQuery = `*[_type=='food' && slug.current == $slug][0] {
+          _id, foodName, price, tags, image, description, available, category, originalPrice, summary
+        }`;
+        const fetchedFood: Food | null = await client.fetch(foodQuery, { slug });
+
+        if (fetchedFood) {
+          setFood(fetchedFood);
+
+          const similarProductsQuery = `*[_type=='food' && slug.current != $slug][0...4] {
+            foodName, price, image, "slug": slug.current
+          }`;
+          const fetchedSimilarProducts: SimilarProduct[] = await client.fetch(similarProductsQuery, { slug });
+
+          setSimilarProducts(fetchedSimilarProducts);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [slug]);
+
+  if (!slug) {
     return <div className="text-center text-red-500">Error: Invalid product slug</div>;
   }
-
-  const { slug } = params; //  Destructure safely
-
-  //  Fetch product details safely
-  const query = `*[_type=='food' && slug.current == $slug][0] {
-    _id, foodName, price, tags, image, description, available, category, originalPrice, summary
-  }`;
-  const food = await client.fetch(query, { slug });
 
   if (!food) {
     return <div className="text-center text-red-500">Product not found</div>;
   }
-
-  //  Fetch similar products
-  const similarProductsQuery = `*[_type=='food' && slug.current != $slug][0...4] {
-    foodName, price, image, "slug": slug.current
-  }`;
-  const similarProducts = await client.fetch(similarProductsQuery, { slug });
 
   return (
     <div className="min-h-screen">
@@ -66,6 +103,7 @@ const Page = async ({ params }: { params?: { slug?: string } }) => {
       {/* Main Content */}
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Product Images */}
           <div className="flex gap-8">
             <div className="flex flex-col gap-4">
               {[1, 2, 3, 4].map((num) => (
@@ -87,6 +125,7 @@ const Page = async ({ params }: { params?: { slug?: string } }) => {
                   width={500}
                   height={500}
                   className="w-96 h-96 rounded-lg"
+                  priority
                 />
               )}
             </div>
@@ -137,7 +176,7 @@ const Page = async ({ params }: { params?: { slug?: string } }) => {
         <div className="mt-12">
           <h3 className="text-2xl font-serif font-bold mb-6"><i>Similar Products</i></h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {similarProducts.map((product: { foodName: string; price: number; image: string; slug: string }) => (
+            {similarProducts.map((product) => (
               <Link href={`/product/${product.slug}`} key={product.slug}>
                 <div className="border p-4 rounded-lg hover:shadow-md transition">
                   {product.image && (
@@ -150,6 +189,7 @@ const Page = async ({ params }: { params?: { slug?: string } }) => {
                     />
                   )}
                   <h4 className="mt-2 text-lg font-semibold">{product.foodName}</h4>
+                  <p className="text-gray-600">${product.price}</p>
                 </div>
               </Link>
             ))}
