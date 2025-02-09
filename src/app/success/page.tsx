@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-const SuccessPage = () => {
+const SuccessContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -37,7 +37,7 @@ const SuccessPage = () => {
       <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md w-full">
         <h2 className="text-2xl font-bold text-green-600">Payment Successful!</h2>
         <p className="mt-2 text-gray-600">Thank you for your order.</p>
-        
+
         <div className="mt-4">
           <p><strong>Order Number:</strong> {orderNumber}</p>
           <p><strong>Total Paid:</strong> ${total}</p>
@@ -53,6 +53,14 @@ const SuccessPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const SuccessPage = () => {
+  return (
+    <Suspense fallback={<p className="text-center mt-10">Loading...</p>}>
+      <SuccessContent />
+    </Suspense>
   );
 };
 

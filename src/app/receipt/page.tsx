@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -20,6 +20,14 @@ interface OrderDetails {
 }
 
 const ReceiptPage = () => {
+  return (
+    <Suspense fallback={<p className="text-center mt-10">Loading order details...</p>}>
+      <ReceiptContent />
+    </Suspense>
+  );
+};
+
+const ReceiptContent = () => {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
@@ -27,7 +35,6 @@ const ReceiptPage = () => {
 
   useEffect(() => {
     if (orderNumber) {
-      // Fetch order details from Sanity or local storage
       const storedOrder = localStorage.getItem(`order_${orderNumber}`);
       if (storedOrder) {
         setOrderDetails(JSON.parse(storedOrder));
@@ -79,7 +86,7 @@ const ReceiptPage = () => {
           <Button className="bg-blue-500 text-white" onClick={handleDownload}>
             Download Receipt
           </Button>
-          <Button className="bg-gray-500 text-white" onClick={() => window.print()}>
+          <Button className="bg-gray-800 text-white" onClick={() => window.print()}>
             Print Receipt
           </Button>
         </div>
