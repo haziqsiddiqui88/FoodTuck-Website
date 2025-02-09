@@ -1,5 +1,5 @@
 "use client";
-
+import { ImageAsset } from "@sanity/types"; 
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +20,7 @@ interface Food {
   name: string;
   price: number;
   quantity: number;
-  image?: any;
+  image?:  ImageAsset;
 }
 
 // Define Form Values Type
