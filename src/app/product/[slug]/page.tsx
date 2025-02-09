@@ -18,14 +18,14 @@ export async function generateStaticParams() {
 }
 
 const Page = async ({ params }: { params?: { slug?: string } }) => {
-  // ✅ Ensure params is properly handled
+  //  Ensure params is properly handled
   if (!params || !params.slug) {
     return <div className="text-center text-red-500">Error: Invalid product slug</div>;
   }
 
-  const { slug } = params; // ✅ Destructure safely
+  const { slug } = params; //  Destructure safely
 
-  // ✅ Fetch product details safely
+  //  Fetch product details safely
   const query = `*[_type=='food' && slug.current == $slug][0] {
     _id, foodName, price, tags, image, description, available, category, originalPrice, summary
   }`;
@@ -35,7 +35,7 @@ const Page = async ({ params }: { params?: { slug?: string } }) => {
     return <div className="text-center text-red-500">Product not found</div>;
   }
 
-  // ✅ Fetch similar products
+  //  Fetch similar products
   const similarProductsQuery = `*[_type=='food' && slug.current != $slug][0...4] {
     foodName, price, image, "slug": slug.current
   }`;
