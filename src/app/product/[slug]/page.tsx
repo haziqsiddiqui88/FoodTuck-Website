@@ -1,4 +1,4 @@
-"use client"; // Ensure this is a Client Component
+"use client"; 
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -12,13 +12,21 @@ import QuantitySelector from "@/components/layout/QuantitySelector/QuantitySelec
 import Rating from "@/components/layout/Rating/Rating";
 import Navbar from "@/app/navbar/Navbar";
 
+// ✅ Define Image Type (Sanity ke liye)
+type SanityImage = {
+  asset: {
+    _ref: string;
+    _type: "reference";
+  };
+};
+
 // ✅ Define Food type
 type Food = {
   _id: string;
   foodName: string;
   price: number;
   tags: string[];
-  image: any;
+  image: SanityImage;
   description: string;
   available: boolean;
   category: string;
@@ -30,15 +38,14 @@ type Food = {
 type SimilarProduct = {
   foodName: string;
   price: number;
-  image: any;
+  image: SanityImage;
   slug: string;
 };
 
 const Page = () => {
   const params = useParams();
-  const slug = params?.slug as string; // ✅ Ensure slug is a string
+  const slug = params?.slug as string;
 
-  // ✅ Use explicit type for food state
   const [food, setFood] = useState<Food | null>(null);
   const [similarProducts, setSimilarProducts] = useState<SimilarProduct[]>([]);
 
@@ -83,8 +90,7 @@ const Page = () => {
       <header className="top-0 left-0 right-0 z-50">
         <nav className="bg-black px-4 md:px-6">
           <Navbar />
-        </nav>
-        <div
+          <div
           className="relative h-[300px] w-full bg-cover bg-center"
           style={{ backgroundImage: `url('/home-pic-1.png')` }}
         >
@@ -98,6 +104,7 @@ const Page = () => {
             </div>
           </div>
         </div>
+        </nav>
       </header>
 
       {/* Main Content */}
@@ -160,7 +167,7 @@ const Page = () => {
                   id: food._id,
                   name: food.foodName,
                   price: food.price,
-                  image: food.image || "/default-image.jpeg",
+                  image: urlFor(food.image).url(),
                 }}
               />
             </div>
